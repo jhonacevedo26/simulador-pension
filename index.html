@@ -1336,29 +1336,377 @@
         // ============================================
 
         function descargarPDF() {
-            const element = document.getElementById('resultados-content');
-            const nombre = resultadosCalculados.nombre.replace(/\s+/g, '_');
-            
-            const opt = {
-                margin: [10, 10, 10, 10],
-                filename: `Diagnostico_Pensional_${nombre}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
+            const res = resultadosCalculados;
+            const nombre = res.nombre.replace(/\s+/g, '_');
+            const fechaGeneracion = new Date().toLocaleDateString('es-CO', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
 
-            // Agregar header temporal para el PDF
-            const headerHTML = `
-                <div id="pdf-header" style="text-align: center; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 2px solid #00D4AA;">
-                    <h1 style="font-size: 24px; color: #0A2540; margin-bottom: 8px;">📊 Diagnóstico Pensional</h1>
-                    <p style="color: #64748B;">Generado el ${new Date().toLocaleDateString('es-CO')} para ${resultadosCalculados.nombre}</p>
+            // Crear contenedor temporal para el PDF
+            const pdfContainer = document.createElement('div');
+            pdfContainer.id = 'pdf-container';
+            pdfContainer.innerHTML = `
+                <style>
+                    #pdf-container {
+                        font-family: 'Helvetica', 'Arial', sans-serif;
+                        color: #0A2540;
+                        padding: 20px;
+                        background: white;
+                        max-width: 800px;
+                    }
+                    #pdf-container * {
+                        box-sizing: border-box;
+                    }
+                    .pdf-header {
+                        text-align: center;
+                        padding-bottom: 20px;
+                        border-bottom: 3px solid #00D4AA;
+                        margin-bottom: 25px;
+                    }
+                    .pdf-header h1 {
+                        font-size: 28px;
+                        color: #0A2540;
+                        margin: 0 0 8px 0;
+                    }
+                    .pdf-header p {
+                        color: #64748B;
+                        font-size: 14px;
+                        margin: 0;
+                    }
+                    .pdf-section {
+                        margin-bottom: 25px;
+                    }
+                    .pdf-section-title {
+                        font-size: 18px;
+                        font-weight: bold;
+                        color: #0A2540;
+                        margin-bottom: 15px;
+                        padding-bottom: 8px;
+                        border-bottom: 2px solid #E2E8F0;
+                    }
+                    .pdf-stats-grid {
+                        display: flex;
+                        justify-content: space-between;
+                        gap: 15px;
+                        margin-bottom: 20px;
+                    }
+                    .pdf-stat-box {
+                        flex: 1;
+                        text-align: center;
+                        padding: 15px;
+                        background: #F8FAFC;
+                        border-radius: 10px;
+                        border: 1px solid #E2E8F0;
+                    }
+                    .pdf-stat-value {
+                        font-size: 22px;
+                        font-weight: bold;
+                        color: #0A2540;
+                    }
+                    .pdf-stat-label {
+                        font-size: 12px;
+                        color: #64748B;
+                        margin-top: 5px;
+                    }
+                    .pdf-scenarios {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 15px;
+                    }
+                    .pdf-scenario-card {
+                        padding: 18px;
+                        border-radius: 12px;
+                        border: 2px solid #E2E8F0;
+                        background: #FAFAFA;
+                    }
+                    .pdf-scenario-card.highlight {
+                        border-color: #00D4AA;
+                        background: #F0FDF9;
+                    }
+                    .pdf-scenario-header {
+                        display: flex;
+                        align-items: center;
+                        gap: 12px;
+                        margin-bottom: 12px;
+                    }
+                    .pdf-scenario-icon {
+                        font-size: 24px;
+                    }
+                    .pdf-scenario-title {
+                        font-weight: bold;
+                        font-size: 16px;
+                        color: #0A2540;
+                    }
+                    .pdf-scenario-subtitle {
+                        font-size: 12px;
+                        color: #64748B;
+                    }
+                    .pdf-scenario-value {
+                        font-size: 26px;
+                        font-weight: bold;
+                        color: #0A2540;
+                        margin-bottom: 5px;
+                    }
+                    .pdf-scenario-range {
+                        font-size: 13px;
+                        color: #64748B;
+                    }
+                    .pdf-scenario-detail {
+                        margin-top: 12px;
+                        padding-top: 12px;
+                        border-top: 1px solid #E2E8F0;
+                        font-size: 13px;
+                    }
+                    .pdf-brecha {
+                        background: linear-gradient(135deg, #FF6B6B 0%, #ee5a5a 100%);
+                        color: white;
+                        padding: 25px;
+                        border-radius: 12px;
+                        text-align: center;
+                        margin-bottom: 25px;
+                    }
+                    .pdf-brecha h3 {
+                        font-size: 16px;
+                        margin: 0 0 10px 0;
+                        opacity: 0.9;
+                    }
+                    .pdf-brecha-value {
+                        font-size: 36px;
+                        font-weight: bold;
+                        margin-bottom: 10px;
+                    }
+                    .pdf-brecha-text {
+                        font-size: 13px;
+                        opacity: 0.9;
+                        max-width: 400px;
+                        margin: 0 auto;
+                    }
+                    .pdf-recommendation {
+                        background: #F0FDF9;
+                        border: 2px solid #00D4AA;
+                        border-radius: 12px;
+                        padding: 20px;
+                        margin-bottom: 25px;
+                    }
+                    .pdf-recommendation h4 {
+                        color: #00b894;
+                        margin: 0 0 12px 0;
+                        font-size: 16px;
+                    }
+                    .pdf-recommendation p {
+                        margin: 0 0 12px 0;
+                        font-size: 14px;
+                    }
+                    .pdf-recommendation ul {
+                        margin: 0;
+                        padding-left: 20px;
+                    }
+                    .pdf-recommendation li {
+                        margin-bottom: 6px;
+                        font-size: 13px;
+                    }
+                    .pdf-disclaimer {
+                        background: #FEF3C7;
+                        border: 1px solid #F59E0B;
+                        border-radius: 10px;
+                        padding: 18px;
+                        font-size: 12px;
+                        color: #92400E;
+                    }
+                    .pdf-disclaimer-title {
+                        font-weight: bold;
+                        margin-bottom: 8px;
+                    }
+                    .pdf-datos-entrada {
+                        background: #F8FAFC;
+                        border-radius: 10px;
+                        padding: 15px;
+                        margin-bottom: 20px;
+                        font-size: 13px;
+                    }
+                    .pdf-datos-entrada h4 {
+                        margin: 0 0 10px 0;
+                        font-size: 14px;
+                        color: #0A2540;
+                    }
+                    .pdf-datos-grid {
+                        display: grid;
+                        grid-template-columns: 1fr 1fr;
+                        gap: 8px;
+                    }
+                    .pdf-dato-item {
+                        display: flex;
+                        justify-content: space-between;
+                    }
+                    .pdf-dato-label {
+                        color: #64748B;
+                    }
+                    .pdf-dato-value {
+                        font-weight: 600;
+                        color: #0A2540;
+                    }
+                </style>
+
+                <div class="pdf-header">
+                    <h1>📊 Diagnóstico Pensional</h1>
+                    <p>Generado el ${fechaGeneracion} para <strong>${res.nombre}</strong></p>
+                </div>
+
+                <div class="pdf-section">
+                    <div class="pdf-datos-entrada">
+                        <h4>📋 Datos de Entrada</h4>
+                        <div class="pdf-datos-grid">
+                            <div class="pdf-dato-item">
+                                <span class="pdf-dato-label">Género:</span>
+                                <span class="pdf-dato-value">${res.genero}</span>
+                            </div>
+                            <div class="pdf-dato-item">
+                                <span class="pdf-dato-label">Edad actual:</span>
+                                <span class="pdf-dato-value">${res.edad} años</span>
+                            </div>
+                            <div class="pdf-dato-item">
+                                <span class="pdf-dato-label">IBL:</span>
+                                <span class="pdf-dato-value">${formatCurrency(res.ibl)}</span>
+                            </div>
+                            <div class="pdf-dato-item">
+                                <span class="pdf-dato-label">Semanas cotizadas:</span>
+                                <span class="pdf-dato-value">${res.semanasCotizadas.toLocaleString('es-CO')}</span>
+                            </div>
+                            ${res.genero === 'Mujer' ? `
+                            <div class="pdf-dato-item">
+                                <span class="pdf-dato-label">Hijos (beneficio):</span>
+                                <span class="pdf-dato-value">${res.hijos}</span>
+                            </div>
+                            ` : ''}
+                            <div class="pdf-dato-item">
+                                <span class="pdf-dato-label">SMLV usado:</span>
+                                <span class="pdf-dato-value">${formatCurrency(res.smlv)}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pdf-section">
+                    <div class="pdf-section-title">📈 Resumen de tu Situación</div>
+                    <div class="pdf-stats-grid">
+                        <div class="pdf-stat-box">
+                            <div class="pdf-stat-value">${res.edadPension}</div>
+                            <div class="pdf-stat-label">Edad de pensión</div>
+                        </div>
+                        <div class="pdf-stat-box">
+                            <div class="pdf-stat-value">${res.anosRestantes}</div>
+                            <div class="pdf-stat-label">Años restantes</div>
+                        </div>
+                        <div class="pdf-stat-box">
+                            <div class="pdf-stat-value">${res.semanasRequeridas.toLocaleString('es-CO')}</div>
+                            <div class="pdf-stat-label">Semanas requeridas</div>
+                        </div>
+                        <div class="pdf-stat-box">
+                            <div class="pdf-stat-value">${res.semanasFaltantes > 0 ? res.semanasFaltantes.toLocaleString('es-CO') : '✓'}</div>
+                            <div class="pdf-stat-label">${res.semanasFaltantes > 0 ? 'Semanas faltantes' : 'Requisito cumplido'}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pdf-section">
+                    <div class="pdf-section-title">💰 Comparativo de Escenarios</div>
+                    <div class="pdf-scenarios">
+                        <div class="pdf-scenario-card">
+                            <div class="pdf-scenario-header">
+                                <span class="pdf-scenario-icon">🏛️</span>
+                                <div>
+                                    <div class="pdf-scenario-title">Colpensiones</div>
+                                    <div class="pdf-scenario-subtitle">Régimen de Prima Media</div>
+                                </div>
+                            </div>
+                            <div class="pdf-scenario-value">${formatCurrency(res.pensionColpensiones)}</div>
+                            <div class="pdf-scenario-range">Tasa de reemplazo: ${res.tasaFinalColp.toFixed(2)}%</div>
+                        </div>
+
+                        <div class="pdf-scenario-card">
+                            <div class="pdf-scenario-header">
+                                <span class="pdf-scenario-icon">🏦</span>
+                                <div>
+                                    <div class="pdf-scenario-title">Fondo Privado</div>
+                                    <div class="pdf-scenario-subtitle">Ahorro Individual (RAIS)</div>
+                                </div>
+                            </div>
+                            <div class="pdf-scenario-value">${formatCurrency(res.pensionPrivadoOptimista)}</div>
+                            <div class="pdf-scenario-range">Rango: ${formatCurrency(res.pensionPrivadoConservador)} - ${formatCurrency(res.pensionPrivadoOptimista)}</div>
+                        </div>
+
+                        <div class="pdf-scenario-card highlight">
+                            <div class="pdf-scenario-header">
+                                <span class="pdf-scenario-icon">⚖️</span>
+                                <div>
+                                    <div class="pdf-scenario-title">Reforma Pensional</div>
+                                    <div class="pdf-scenario-subtitle">Sistema Mixto (2.5 SMLV + Excedente)</div>
+                                </div>
+                            </div>
+                            <div class="pdf-scenario-value">${formatCurrency(res.pensionReformaOptimista)}</div>
+                            <div class="pdf-scenario-range">Rango: ${formatCurrency(res.pensionReformaConservador)} - ${formatCurrency(res.pensionReformaOptimista)}</div>
+                            <div class="pdf-scenario-detail">
+                                <div>Parte Colpensiones: <strong>${formatCurrency(res.pensionReformaColp)}</strong></div>
+                                <div>Parte Fondo Privado: <strong>${formatCurrency(res.pensionReformaPrivConservador)} - ${formatCurrency(res.pensionReformaPrivOptimista)}</strong></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pdf-brecha">
+                    <h3>⚠️ Tu Brecha Pensional Mensual</h3>
+                    <div class="pdf-brecha-value">${res.brechaPensional > 0 ? '-' : ''}${formatCurrency(Math.abs(res.brechaPensional))}</div>
+                    <p class="pdf-brecha-text">Esta es la diferencia entre tu ingreso actual (${formatCurrency(res.ibl)}) y tu mejor pensión estimada. Para mantener tu calidad de vida, necesitas cubrir esta brecha.</p>
+                </div>
+
+                <div class="pdf-recommendation">
+                    <h4>💡 Recomendación: Acumulación Paralela</h4>
+                    <p>Para cerrar tu brecha pensional y mantener o mejorar tu calidad de vida, considera estas estrategias:</p>
+                    <ul>
+                        <li>Ahorro voluntario en pensiones</li>
+                        <li>Fondos de inversión colectiva</li>
+                        <li>Inversiones en propiedad raíz</li>
+                        <li>Portafolios diversificados en bolsa</li>
+                        <li>Fondos de capital privado</li>
+                    </ul>
+                </div>
+
+                <div class="pdf-disclaimer">
+                    <div class="pdf-disclaimer-title">⚠️ Aviso Legal Importante</div>
+                    <p>Esta es una proyección estimada con fines educativos. Las condiciones laborales, normativas y reformas pensionales pueden cambiar en el futuro. Este cálculo no constituye asesoría financiera formal. Los porcentajes del fondo privado (40%-45%) son estimaciones conservadoras basadas en promedios históricos del mercado. Para decisiones importantes sobre tu pensión, consulta con un profesional certificado.</p>
                 </div>
             `;
 
-            element.insertAdjacentHTML('afterbegin', headerHTML);
+            // Agregar al DOM temporalmente
+            document.body.appendChild(pdfContainer);
 
-            html2pdf().set(opt).from(element).save().then(() => {
-                document.getElementById('pdf-header').remove();
+            const opt = {
+                margin: [15, 15, 15, 15],
+                filename: `Diagnostico_Pensional_${nombre}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { 
+                    scale: 2, 
+                    useCORS: true,
+                    logging: false,
+                    backgroundColor: '#ffffff'
+                },
+                jsPDF: { 
+                    unit: 'mm', 
+                    format: 'a4', 
+                    orientation: 'portrait' 
+                },
+                pagebreak: { mode: 'avoid-all' }
+            };
+
+            html2pdf().set(opt).from(pdfContainer).save().then(() => {
+                // Remover el contenedor temporal
+                document.body.removeChild(pdfContainer);
+            }).catch(error => {
+                console.error('Error generando PDF:', error);
+                document.body.removeChild(pdfContainer);
+                alert('Hubo un error al generar el PDF. Por favor intenta de nuevo.');
             });
         }
     </script>
