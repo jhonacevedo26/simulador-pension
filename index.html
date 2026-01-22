@@ -1331,6 +1331,7 @@
             }
         }
 
+
         // ============================================
         // DESCARGAR PDF
         // ============================================
@@ -1344,338 +1345,153 @@
                 day: 'numeric' 
             });
 
+            // Calcular porcentaje de brecha
+            const porcentajeBrecha = ((res.brechaPensional / res.ibl) * 100).toFixed(0);
+            const mejorPension = Math.max(res.pensionColpensiones, res.pensionPrivadoOptimista, res.pensionReformaOptimista);
+
             // Crear contenedor temporal para el PDF
             const pdfContainer = document.createElement('div');
             pdfContainer.id = 'pdf-container';
+            pdfContainer.style.cssText = 'position: absolute; left: -9999px; top: 0; width: 794px; background: white;';
+            
             pdfContainer.innerHTML = `
-                <style>
-                    #pdf-container {
-                        font-family: 'Helvetica', 'Arial', sans-serif;
-                        color: #0A2540;
-                        padding: 20px;
-                        background: white;
-                        max-width: 800px;
-                    }
-                    #pdf-container * {
-                        box-sizing: border-box;
-                    }
-                    .pdf-header {
-                        text-align: center;
-                        padding-bottom: 20px;
-                        border-bottom: 3px solid #00D4AA;
-                        margin-bottom: 25px;
-                    }
-                    .pdf-header h1 {
-                        font-size: 28px;
-                        color: #0A2540;
-                        margin: 0 0 8px 0;
-                    }
-                    .pdf-header p {
-                        color: #64748B;
-                        font-size: 14px;
-                        margin: 0;
-                    }
-                    .pdf-section {
-                        margin-bottom: 25px;
-                    }
-                    .pdf-section-title {
-                        font-size: 18px;
-                        font-weight: bold;
-                        color: #0A2540;
-                        margin-bottom: 15px;
-                        padding-bottom: 8px;
-                        border-bottom: 2px solid #E2E8F0;
-                    }
-                    .pdf-stats-grid {
-                        display: flex;
-                        justify-content: space-between;
-                        gap: 15px;
-                        margin-bottom: 20px;
-                    }
-                    .pdf-stat-box {
-                        flex: 1;
-                        text-align: center;
-                        padding: 15px;
-                        background: #F8FAFC;
-                        border-radius: 10px;
-                        border: 1px solid #E2E8F0;
-                    }
-                    .pdf-stat-value {
-                        font-size: 22px;
-                        font-weight: bold;
-                        color: #0A2540;
-                    }
-                    .pdf-stat-label {
-                        font-size: 12px;
-                        color: #64748B;
-                        margin-top: 5px;
-                    }
-                    .pdf-scenarios {
-                        display: flex;
-                        flex-direction: column;
-                        gap: 15px;
-                    }
-                    .pdf-scenario-card {
-                        padding: 18px;
-                        border-radius: 12px;
-                        border: 2px solid #E2E8F0;
-                        background: #FAFAFA;
-                    }
-                    .pdf-scenario-card.highlight {
-                        border-color: #00D4AA;
-                        background: #F0FDF9;
-                    }
-                    .pdf-scenario-header {
-                        display: flex;
-                        align-items: center;
-                        gap: 12px;
-                        margin-bottom: 12px;
-                    }
-                    .pdf-scenario-icon {
-                        font-size: 24px;
-                    }
-                    .pdf-scenario-title {
-                        font-weight: bold;
-                        font-size: 16px;
-                        color: #0A2540;
-                    }
-                    .pdf-scenario-subtitle {
-                        font-size: 12px;
-                        color: #64748B;
-                    }
-                    .pdf-scenario-value {
-                        font-size: 26px;
-                        font-weight: bold;
-                        color: #0A2540;
-                        margin-bottom: 5px;
-                    }
-                    .pdf-scenario-range {
-                        font-size: 13px;
-                        color: #64748B;
-                    }
-                    .pdf-scenario-detail {
-                        margin-top: 12px;
-                        padding-top: 12px;
-                        border-top: 1px solid #E2E8F0;
-                        font-size: 13px;
-                    }
-                    .pdf-brecha {
-                        background: linear-gradient(135deg, #FF6B6B 0%, #ee5a5a 100%);
-                        color: white;
-                        padding: 25px;
-                        border-radius: 12px;
-                        text-align: center;
-                        margin-bottom: 25px;
-                    }
-                    .pdf-brecha h3 {
-                        font-size: 16px;
-                        margin: 0 0 10px 0;
-                        opacity: 0.9;
-                    }
-                    .pdf-brecha-value {
-                        font-size: 36px;
-                        font-weight: bold;
-                        margin-bottom: 10px;
-                    }
-                    .pdf-brecha-text {
-                        font-size: 13px;
-                        opacity: 0.9;
-                        max-width: 400px;
-                        margin: 0 auto;
-                    }
-                    .pdf-recommendation {
-                        background: #F0FDF9;
-                        border: 2px solid #00D4AA;
-                        border-radius: 12px;
-                        padding: 20px;
-                        margin-bottom: 25px;
-                    }
-                    .pdf-recommendation h4 {
-                        color: #00b894;
-                        margin: 0 0 12px 0;
-                        font-size: 16px;
-                    }
-                    .pdf-recommendation p {
-                        margin: 0 0 12px 0;
-                        font-size: 14px;
-                    }
-                    .pdf-recommendation ul {
-                        margin: 0;
-                        padding-left: 20px;
-                    }
-                    .pdf-recommendation li {
-                        margin-bottom: 6px;
-                        font-size: 13px;
-                    }
-                    .pdf-disclaimer {
-                        background: #FEF3C7;
-                        border: 1px solid #F59E0B;
-                        border-radius: 10px;
-                        padding: 18px;
-                        font-size: 12px;
-                        color: #92400E;
-                    }
-                    .pdf-disclaimer-title {
-                        font-weight: bold;
-                        margin-bottom: 8px;
-                    }
-                    .pdf-datos-entrada {
-                        background: #F8FAFC;
-                        border-radius: 10px;
-                        padding: 15px;
-                        margin-bottom: 20px;
-                        font-size: 13px;
-                    }
-                    .pdf-datos-entrada h4 {
-                        margin: 0 0 10px 0;
-                        font-size: 14px;
-                        color: #0A2540;
-                    }
-                    .pdf-datos-grid {
-                        display: grid;
-                        grid-template-columns: 1fr 1fr;
-                        gap: 8px;
-                    }
-                    .pdf-dato-item {
-                        display: flex;
-                        justify-content: space-between;
-                    }
-                    .pdf-dato-label {
-                        color: #64748B;
-                    }
-                    .pdf-dato-value {
-                        font-weight: 600;
-                        color: #0A2540;
-                    }
-                </style>
+                <div style="font-family: Helvetica, Arial, sans-serif; color: #1a1a2e; padding: 30px; font-size: 11px; line-height: 1.4; background: white;">
+                    
+                    <!-- HEADER -->
+                    <div style="text-align: center; padding-bottom: 15px; border-bottom: 3px solid #00D4AA; margin-bottom: 20px;">
+                        <h1 style="font-size: 26px; color: #1a1a2e; margin: 0 0 5px 0; font-weight: bold;">DIAGNÓSTICO PENSIONAL</h1>
+                        <p style="color: #666; font-size: 12px; margin: 0;">Generado el ${fechaGeneracion} para <strong style="color: #1a1a2e;">${res.nombre}</strong></p>
+                    </div>
 
-                <div class="pdf-header">
-                    <h1>📊 Diagnóstico Pensional</h1>
-                    <p>Generado el ${fechaGeneracion} para <strong>${res.nombre}</strong></p>
-                </div>
+                    <!-- RESUMEN EJECUTIVO -->
+                    <div style="background: #1a1a2e; color: white; padding: 20px; border-radius: 12px; margin-bottom: 18px;">
+                        <h2 style="margin: 0 0 15px 0; font-size: 15px; color: #00D4AA; font-weight: bold;">⚡ RESUMEN EJECUTIVO</h2>
+                        
+                        <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
+                            <tr>
+                                <td style="width: 33%; text-align: center; background: rgba(255,255,255,0.1); padding: 12px; border-radius: 8px;">
+                                    <div style="font-size: 11px; opacity: 0.8; margin-bottom: 5px;">Ingreso Actual</div>
+                                    <div style="font-size: 20px; font-weight: bold;">${formatCurrency(res.ibl)}</div>
+                                </td>
+                                <td style="width: 5%;"></td>
+                                <td style="width: 33%; text-align: center; background: rgba(255,255,255,0.1); padding: 12px; border-radius: 8px;">
+                                    <div style="font-size: 11px; opacity: 0.8; margin-bottom: 5px;">Mejor Pensión Estimada</div>
+                                    <div style="font-size: 20px; font-weight: bold;">${formatCurrency(mejorPension)}</div>
+                                </td>
+                                <td style="width: 5%;"></td>
+                                <td style="width: 33%; text-align: center; background: rgba(255,107,107,0.3); padding: 12px; border-radius: 8px; border: 2px solid #FF6B6B;">
+                                    <div style="font-size: 11px; opacity: 0.9; margin-bottom: 5px;">Brecha Mensual</div>
+                                    <div style="font-size: 20px; font-weight: bold; color: #FF6B6B;">-${formatCurrency(Math.abs(res.brechaPensional))}</div>
+                                </td>
+                            </tr>
+                        </table>
 
-                <div class="pdf-section">
-                    <div class="pdf-datos-entrada">
-                        <h4>📋 Datos de Entrada</h4>
-                        <div class="pdf-datos-grid">
-                            <div class="pdf-dato-item">
-                                <span class="pdf-dato-label">Género:</span>
-                                <span class="pdf-dato-value">${res.genero}</span>
-                            </div>
-                            <div class="pdf-dato-item">
-                                <span class="pdf-dato-label">Edad actual:</span>
-                                <span class="pdf-dato-value">${res.edad} años</span>
-                            </div>
-                            <div class="pdf-dato-item">
-                                <span class="pdf-dato-label">IBL:</span>
-                                <span class="pdf-dato-value">${formatCurrency(res.ibl)}</span>
-                            </div>
-                            <div class="pdf-dato-item">
-                                <span class="pdf-dato-label">Semanas cotizadas:</span>
-                                <span class="pdf-dato-value">${res.semanasCotizadas.toLocaleString('es-CO')}</span>
-                            </div>
-                            ${res.genero === 'Mujer' ? `
-                            <div class="pdf-dato-item">
-                                <span class="pdf-dato-label">Hijos (beneficio):</span>
-                                <span class="pdf-dato-value">${res.hijos}</span>
-                            </div>
-                            ` : ''}
-                            <div class="pdf-dato-item">
-                                <span class="pdf-dato-label">SMLV usado:</span>
-                                <span class="pdf-dato-value">${formatCurrency(res.smlv)}</span>
-                            </div>
+                        <div style="background: rgba(255,107,107,0.2); border-left: 4px solid #FF6B6B; padding: 12px 15px; border-radius: 0 8px 8px 0;">
+                            <p style="margin: 0; font-size: 12px; line-height: 1.6;">
+                                <strong style="color: #FF6B6B;">⚠️ ATENCIÓN:</strong> Al pensionarte, tu ingreso pasará de <strong>${formatCurrency(res.ibl)}</strong> a aproximadamente <strong>${formatCurrency(mejorPension)}</strong>. 
+                                Esto representa una <strong>reducción del ${Math.abs(porcentajeBrecha)}%</strong> en tu capacidad económica mensual.
+                            </p>
+                            <p style="margin: 10px 0 0 0; font-size: 12px; line-height: 1.5;">
+                                <strong>Sin una estrategia de acumulación paralela, podrías enfrentar dificultades para mantener tu calidad de vida actual en el retiro.</strong>
+                            </p>
                         </div>
                     </div>
-                </div>
 
-                <div class="pdf-section">
-                    <div class="pdf-section-title">📈 Resumen de tu Situación</div>
-                    <div class="pdf-stats-grid">
-                        <div class="pdf-stat-box">
-                            <div class="pdf-stat-value">${res.edadPension}</div>
-                            <div class="pdf-stat-label">Edad de pensión</div>
-                        </div>
-                        <div class="pdf-stat-box">
-                            <div class="pdf-stat-value">${res.anosRestantes}</div>
-                            <div class="pdf-stat-label">Años restantes</div>
-                        </div>
-                        <div class="pdf-stat-box">
-                            <div class="pdf-stat-value">${res.semanasRequeridas.toLocaleString('es-CO')}</div>
-                            <div class="pdf-stat-label">Semanas requeridas</div>
-                        </div>
-                        <div class="pdf-stat-box">
-                            <div class="pdf-stat-value">${res.semanasFaltantes > 0 ? res.semanasFaltantes.toLocaleString('es-CO') : '✓'}</div>
-                            <div class="pdf-stat-label">${res.semanasFaltantes > 0 ? 'Semanas faltantes' : 'Requisito cumplido'}</div>
-                        </div>
+                    <!-- DATOS Y SITUACIÓN -->
+                    <table style="width: 100%; margin-bottom: 15px; border-collapse: collapse;">
+                        <tr>
+                            <td style="width: 48%; vertical-align: top; background: #f8f9fa; padding: 12px; border-radius: 8px; border: 1px solid #e9ecef;">
+                                <h3 style="margin: 0 0 10px 0; font-size: 12px; color: #1a1a2e; border-bottom: 1px solid #dee2e6; padding-bottom: 6px;">📋 Datos de Entrada</h3>
+                                <table style="width: 100%; font-size: 11px;">
+                                    <tr><td style="color: #666; padding: 3px 0;">Género:</td><td style="text-align: right; font-weight: 600;">${res.genero}</td></tr>
+                                    <tr><td style="color: #666; padding: 3px 0;">Edad actual:</td><td style="text-align: right; font-weight: 600;">${res.edad} años</td></tr>
+                                    <tr><td style="color: #666; padding: 3px 0;">IBL:</td><td style="text-align: right; font-weight: 600;">${formatCurrency(res.ibl)}</td></tr>
+                                    <tr><td style="color: #666; padding: 3px 0;">Semanas cotizadas:</td><td style="text-align: right; font-weight: 600;">${res.semanasCotizadas.toLocaleString('es-CO')}</td></tr>
+                                    ${res.genero === 'Mujer' ? `<tr><td style="color: #666; padding: 3px 0;">Hijos (beneficio):</td><td style="text-align: right; font-weight: 600;">${res.hijos}</td></tr>` : ''}
+                                </table>
+                            </td>
+                            <td style="width: 4%;"></td>
+                            <td style="width: 48%; vertical-align: top; background: #f8f9fa; padding: 12px; border-radius: 8px; border: 1px solid #e9ecef;">
+                                <h3 style="margin: 0 0 10px 0; font-size: 12px; color: #1a1a2e; border-bottom: 1px solid #dee2e6; padding-bottom: 6px;">📈 Tu Situación Pensional</h3>
+                                <table style="width: 100%; font-size: 11px;">
+                                    <tr><td style="color: #666; padding: 3px 0;">Edad de pensión:</td><td style="text-align: right; font-weight: 600;">${res.edadPension} años</td></tr>
+                                    <tr><td style="color: #666; padding: 3px 0;">Años restantes:</td><td style="text-align: right; font-weight: 600;">${res.anosRestantes} años</td></tr>
+                                    <tr><td style="color: #666; padding: 3px 0;">Semanas requeridas:</td><td style="text-align: right; font-weight: 600;">${res.semanasRequeridas.toLocaleString('es-CO')}</td></tr>
+                                    <tr><td style="color: #666; padding: 3px 0;">Semanas faltantes:</td><td style="text-align: right; font-weight: 600; ${res.semanasFaltantes > 0 ? 'color: #FF6B6B;' : 'color: #00a884;'}">${res.semanasFaltantes > 0 ? res.semanasFaltantes.toLocaleString('es-CO') : '✓ Cumple'}</td></tr>
+                                    <tr><td style="color: #666; padding: 3px 0;">Año estimado pensión:</td><td style="text-align: right; font-weight: 600;">${res.anoEstimadoPension}</td></tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <!-- COMPARATIVO DE ESCENARIOS -->
+                    <h3 style="margin: 0 0 12px 0; font-size: 14px; color: #1a1a2e; border-bottom: 2px solid #e9ecef; padding-bottom: 6px; font-weight: bold;">💰 Comparativo de Escenarios de Pensión</h3>
+                    
+                    <table style="width: 100%; margin-bottom: 18px; border-collapse: collapse;">
+                        <tr>
+                            <!-- Colpensiones -->
+                            <td style="width: 32%; vertical-align: top; border: 2px solid #e9ecef; border-radius: 8px; padding: 12px; background: #fff;">
+                                <div style="font-size: 11px; color: #666; margin-bottom: 3px; font-weight: bold;">🏛️ COLPENSIONES</div>
+                                <div style="font-size: 9px; color: #999; margin-bottom: 10px;">Régimen de Prima Media</div>
+                                <div style="font-size: 22px; font-weight: bold; color: #1a1a2e; margin-bottom: 6px;">${formatCurrency(res.pensionColpensiones)}</div>
+                                <div style="font-size: 10px; color: #666;">Tasa de reemplazo: ${res.tasaFinalColp.toFixed(2)}%</div>
+                            </td>
+                            <td style="width: 2%;"></td>
+                            <!-- Fondo Privado -->
+                            <td style="width: 32%; vertical-align: top; border: 2px solid #e9ecef; border-radius: 8px; padding: 12px; background: #fff;">
+                                <div style="font-size: 11px; color: #666; margin-bottom: 3px; font-weight: bold;">🏦 FONDO PRIVADO</div>
+                                <div style="font-size: 9px; color: #999; margin-bottom: 10px;">Ahorro Individual (RAIS)</div>
+                                <div style="font-size: 22px; font-weight: bold; color: #1a1a2e; margin-bottom: 6px;">${formatCurrency(res.pensionPrivadoOptimista)}</div>
+                                <div style="font-size: 10px; color: #666;">Rango: ${formatCurrency(res.pensionPrivadoConservador)} - ${formatCurrency(res.pensionPrivadoOptimista)}</div>
+                            </td>
+                            <td style="width: 2%;"></td>
+                            <!-- Reforma -->
+                            <td style="width: 32%; vertical-align: top; border: 2px solid #00D4AA; border-radius: 8px; padding: 12px; background: #f0fdf9;">
+                                <div style="font-size: 11px; color: #00a884; margin-bottom: 3px; font-weight: bold;">⚖️ REFORMA PENSIONAL</div>
+                                <div style="font-size: 9px; color: #999; margin-bottom: 10px;">Sistema Mixto (2.5 SMLV + Excedente)</div>
+                                <div style="font-size: 22px; font-weight: bold; color: #1a1a2e; margin-bottom: 6px;">${formatCurrency(res.pensionReformaOptimista)}</div>
+                                <div style="font-size: 10px; color: #666;">
+                                    Parte Colpensiones: ${formatCurrency(res.pensionReformaColp)}<br>
+                                    Parte Privado: ${formatCurrency(res.pensionReformaPrivConservador)} - ${formatCurrency(res.pensionReformaPrivOptimista)}
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <!-- RECOMENDACIÓN -->
+                    <div style="background: linear-gradient(135deg, #00D4AA 0%, #00a884 100%); color: white; padding: 15px 18px; border-radius: 10px; margin-bottom: 15px;">
+                        <h3 style="margin: 0 0 10px 0; font-size: 13px; font-weight: bold;">💡 ¿CÓMO CERRAR ESTA BRECHA?</h3>
+                        <p style="margin: 0 0 12px 0; font-size: 11px; line-height: 1.5;">
+                            Tienes <strong>${res.anosRestantes} años</strong> para construir un patrimonio que complemente tu pensión. La clave está en comenzar <strong>HOY</strong> con una estrategia de acumulación paralela:
+                        </p>
+                        <table style="width: 100%;"><tr>
+                            <td style="font-size: 10px; padding: 4px 8px; background: rgba(255,255,255,0.2); border-radius: 12px; text-align: center;">✓ Pensión Voluntaria</td>
+                            <td style="width: 8px;"></td>
+                            <td style="font-size: 10px; padding: 4px 8px; background: rgba(255,255,255,0.2); border-radius: 12px; text-align: center;">✓ Fondos de Inversión</td>
+                            <td style="width: 8px;"></td>
+                            <td style="font-size: 10px; padding: 4px 8px; background: rgba(255,255,255,0.2); border-radius: 12px; text-align: center;">✓ Propiedad Raíz</td>
+                            <td style="width: 8px;"></td>
+                            <td style="font-size: 10px; padding: 4px 8px; background: rgba(255,255,255,0.2); border-radius: 12px; text-align: center;">✓ Bolsa de Valores</td>
+                            <td style="width: 8px;"></td>
+                            <td style="font-size: 10px; padding: 4px 8px; background: rgba(255,255,255,0.2); border-radius: 12px; text-align: center;">✓ Capital Privado</td>
+                        </tr></table>
                     </div>
-                </div>
 
-                <div class="pdf-section">
-                    <div class="pdf-section-title">💰 Comparativo de Escenarios</div>
-                    <div class="pdf-scenarios">
-                        <div class="pdf-scenario-card">
-                            <div class="pdf-scenario-header">
-                                <span class="pdf-scenario-icon">🏛️</span>
-                                <div>
-                                    <div class="pdf-scenario-title">Colpensiones</div>
-                                    <div class="pdf-scenario-subtitle">Régimen de Prima Media</div>
-                                </div>
-                            </div>
-                            <div class="pdf-scenario-value">${formatCurrency(res.pensionColpensiones)}</div>
-                            <div class="pdf-scenario-range">Tasa de reemplazo: ${res.tasaFinalColp.toFixed(2)}%</div>
-                        </div>
-
-                        <div class="pdf-scenario-card">
-                            <div class="pdf-scenario-header">
-                                <span class="pdf-scenario-icon">🏦</span>
-                                <div>
-                                    <div class="pdf-scenario-title">Fondo Privado</div>
-                                    <div class="pdf-scenario-subtitle">Ahorro Individual (RAIS)</div>
-                                </div>
-                            </div>
-                            <div class="pdf-scenario-value">${formatCurrency(res.pensionPrivadoOptimista)}</div>
-                            <div class="pdf-scenario-range">Rango: ${formatCurrency(res.pensionPrivadoConservador)} - ${formatCurrency(res.pensionPrivadoOptimista)}</div>
-                        </div>
-
-                        <div class="pdf-scenario-card highlight">
-                            <div class="pdf-scenario-header">
-                                <span class="pdf-scenario-icon">⚖️</span>
-                                <div>
-                                    <div class="pdf-scenario-title">Reforma Pensional</div>
-                                    <div class="pdf-scenario-subtitle">Sistema Mixto (2.5 SMLV + Excedente)</div>
-                                </div>
-                            </div>
-                            <div class="pdf-scenario-value">${formatCurrency(res.pensionReformaOptimista)}</div>
-                            <div class="pdf-scenario-range">Rango: ${formatCurrency(res.pensionReformaConservador)} - ${formatCurrency(res.pensionReformaOptimista)}</div>
-                            <div class="pdf-scenario-detail">
-                                <div>Parte Colpensiones: <strong>${formatCurrency(res.pensionReformaColp)}</strong></div>
-                                <div>Parte Fondo Privado: <strong>${formatCurrency(res.pensionReformaPrivConservador)} - ${formatCurrency(res.pensionReformaPrivOptimista)}</strong></div>
-                            </div>
-                        </div>
+                    <!-- CTA -->
+                    <div style="background: #1a1a2e; color: white; padding: 15px 20px; border-radius: 10px; text-align: center; margin-bottom: 15px;">
+                        <p style="margin: 0 0 6px 0; font-size: 13px; font-weight: bold;">
+                            ¿Quieres un plan personalizado para asegurar tu retiro?
+                        </p>
+                        <p style="margin: 0; font-size: 11px; opacity: 0.9;">
+                            Agenda una asesoría con nuestro equipo de expertos y descubre las mejores alternativas de inversión para tu perfil.
+                        </p>
                     </div>
-                </div>
 
-                <div class="pdf-brecha">
-                    <h3>⚠️ Tu Brecha Pensional Mensual</h3>
-                    <div class="pdf-brecha-value">${res.brechaPensional > 0 ? '-' : ''}${formatCurrency(Math.abs(res.brechaPensional))}</div>
-                    <p class="pdf-brecha-text">Esta es la diferencia entre tu ingreso actual (${formatCurrency(res.ibl)}) y tu mejor pensión estimada. Para mantener tu calidad de vida, necesitas cubrir esta brecha.</p>
-                </div>
+                    <!-- DISCLAIMER -->
+                    <div style="background: #fff8e6; border: 1px solid #f0c36d; border-radius: 6px; padding: 10px 12px; font-size: 9px; color: #8a6d3b; line-height: 1.5;">
+                        <strong>⚠️ Aviso Legal:</strong> Esta es una proyección estimada con fines educativos. Las condiciones laborales, normativas y reformas pensionales pueden cambiar en el futuro. Este cálculo no constituye asesoría financiera formal. Los porcentajes del fondo privado (40%-45%) son estimaciones conservadoras basadas en promedios históricos del mercado. Consulta con un profesional certificado para decisiones importantes sobre tu pensión.
+                    </div>
 
-                <div class="pdf-recommendation">
-                    <h4>💡 Recomendación: Acumulación Paralela</h4>
-                    <p>Para cerrar tu brecha pensional y mantener o mejorar tu calidad de vida, considera estas estrategias:</p>
-                    <ul>
-                        <li>Ahorro voluntario en pensiones</li>
-                        <li>Fondos de inversión colectiva</li>
-                        <li>Inversiones en propiedad raíz</li>
-                        <li>Portafolios diversificados en bolsa</li>
-                        <li>Fondos de capital privado</li>
-                    </ul>
-                </div>
-
-                <div class="pdf-disclaimer">
-                    <div class="pdf-disclaimer-title">⚠️ Aviso Legal Importante</div>
-                    <p>Esta es una proyección estimada con fines educativos. Las condiciones laborales, normativas y reformas pensionales pueden cambiar en el futuro. Este cálculo no constituye asesoría financiera formal. Los porcentajes del fondo privado (40%-45%) son estimaciones conservadoras basadas en promedios históricos del mercado. Para decisiones importantes sobre tu pensión, consulta con un profesional certificado.</p>
                 </div>
             `;
 
@@ -1683,25 +1499,26 @@
             document.body.appendChild(pdfContainer);
 
             const opt = {
-                margin: [15, 15, 15, 15],
+                margin: 0,
                 filename: `Diagnostico_Pensional_${nombre}.pdf`,
                 image: { type: 'jpeg', quality: 0.98 },
                 html2canvas: { 
                     scale: 2, 
                     useCORS: true,
                     logging: false,
-                    backgroundColor: '#ffffff'
+                    backgroundColor: '#ffffff',
+                    width: 794,
+                    windowWidth: 794
                 },
                 jsPDF: { 
-                    unit: 'mm', 
-                    format: 'a4', 
-                    orientation: 'portrait' 
-                },
-                pagebreak: { mode: 'avoid-all' }
+                    unit: 'px', 
+                    format: [794, 1123],
+                    orientation: 'portrait',
+                    hotfixes: ['px_scaling']
+                }
             };
 
             html2pdf().set(opt).from(pdfContainer).save().then(() => {
-                // Remover el contenedor temporal
                 document.body.removeChild(pdfContainer);
             }).catch(error => {
                 console.error('Error generando PDF:', error);
