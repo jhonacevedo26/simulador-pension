@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora de Pensión - Diagnóstico Personalizado</title>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root {
             --primary: #0A2540;
@@ -192,7 +191,6 @@
             grid-column: 1 / -1;
         }
 
-        /* Label with tooltip */
         .label-row {
             display: flex;
             align-items: center;
@@ -211,7 +209,7 @@
             font-size: 0.8rem;
         }
 
-        /* Tooltip styles */
+        /* Tooltip */
         .tooltip-container {
             position: relative;
             display: inline-flex;
@@ -273,19 +271,6 @@
             opacity: 1;
         }
 
-        /* Mobile tooltip adjustment */
-        @media (max-width: 600px) {
-            .tooltip-text {
-                width: 220px;
-                left: 0;
-                transform: translateX(0);
-            }
-            .tooltip-text::after {
-                left: 14px;
-                transform: translateX(0);
-            }
-        }
-
         input, select {
             padding: 14px 16px;
             border: 2px solid var(--border);
@@ -301,10 +286,6 @@
             border-color: var(--accent);
             background: white;
             box-shadow: 0 0 0 4px rgba(0, 212, 170, 0.1);
-        }
-
-        input::placeholder {
-            color: var(--text-secondary);
         }
 
         /* Gender Toggle */
@@ -411,15 +392,15 @@
         /* Results Section */
         .results-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
             margin-bottom: 24px;
         }
 
         .result-card {
             background: var(--bg-light);
             border-radius: 16px;
-            padding: 24px;
+            padding: 20px;
             border: 2px solid var(--border);
             transition: all 0.3s ease;
         }
@@ -439,17 +420,17 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
         }
 
         .result-icon {
-            width: 48px;
-            height: 48px;
+            width: 44px;
+            height: 44px;
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
+            font-size: 1.4rem;
         }
 
         .result-icon.colpensiones { background: #E8F5E9; }
@@ -458,25 +439,92 @@
 
         .result-title {
             font-weight: 700;
-            font-size: 1rem;
+            font-size: 0.95rem;
             color: var(--primary);
         }
 
         .result-subtitle {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: var(--text-secondary);
         }
 
         .result-value {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             font-weight: 700;
             color: var(--primary);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
         .result-range {
-            font-size: 1rem;
+            font-size: 0.9rem;
             color: var(--text-secondary);
+        }
+
+        /* Resumen Ejecutivo */
+        .resumen-ejecutivo {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: 24px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+        }
+
+        .resumen-ejecutivo h3 {
+            color: var(--accent);
+            margin-bottom: 16px;
+            font-size: 1.1rem;
+        }
+
+        .resumen-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .resumen-item {
+            text-align: center;
+            padding: 16px 12px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+        }
+
+        .resumen-item.alerta {
+            background: rgba(255,107,107,0.3);
+            border: 2px solid var(--warning);
+        }
+
+        .resumen-item-label {
+            font-size: 0.8rem;
+            opacity: 0.85;
+            margin-bottom: 6px;
+        }
+
+        .resumen-item-value {
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .resumen-item.alerta .resumen-item-value {
+            color: var(--warning);
+        }
+
+        .alerta-box {
+            background: rgba(255,107,107,0.2);
+            border-left: 4px solid var(--warning);
+            padding: 16px;
+            border-radius: 0 12px 12px 0;
+            margin-top: 16px;
+        }
+
+        .alerta-box p {
+            margin: 0;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .alerta-box strong {
+            color: var(--warning);
         }
 
         /* Brecha Card */
@@ -484,28 +532,37 @@
             background: linear-gradient(135deg, var(--warning) 0%, #ee5a5a 100%);
             color: white;
             border-radius: 16px;
-            padding: 28px;
+            padding: 24px;
             text-align: center;
             margin-bottom: 24px;
         }
 
         .brecha-card h3 {
-            font-size: 1.1rem;
+            font-size: 1rem;
             margin-bottom: 8px;
             opacity: 0.9;
         }
 
         .brecha-value {
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             font-weight: 700;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
 
         .brecha-text {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             opacity: 0.9;
-            max-width: 400px;
+            max-width: 450px;
             margin: 0 auto;
+        }
+
+        .porcentaje-reduccion {
+            display: inline-block;
+            background: rgba(0,0,0,0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            margin-top: 12px;
+            font-size: 0.9rem;
         }
 
         /* Info Box */
@@ -520,55 +577,112 @@
         .info-box h4 {
             color: var(--accent-dark);
             margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            font-size: 1.1rem;
         }
 
-        .info-box ul {
-            list-style: none;
-            display: grid;
-            gap: 8px;
-        }
-
-        .info-box li {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        .info-box p {
+            margin-bottom: 16px;
             color: var(--text-primary);
         }
 
-        .info-box li::before {
-            content: '✓';
-            color: var(--accent);
-            font-weight: 700;
+        .estrategias-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .estrategia-tag {
+            background: white;
+            border: 1px solid var(--accent);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--accent-dark);
+            font-weight: 500;
+        }
+
+        /* CTA Box */
+        .cta-box {
+            background: var(--primary);
+            color: white;
+            padding: 24px;
+            border-radius: 16px;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .cta-box h4 {
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .cta-box p {
+            opacity: 0.9;
+            font-size: 0.95rem;
         }
 
         /* Summary Stats */
         .summary-stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 16px;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
             margin-bottom: 24px;
         }
 
         .stat-item {
             text-align: center;
-            padding: 20px;
+            padding: 16px;
             background: var(--bg-light);
             border-radius: 12px;
+            border: 1px solid var(--border);
         }
 
         .stat-value {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: 700;
             color: var(--primary);
         }
 
         .stat-label {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: var(--text-secondary);
             margin-top: 4px;
+        }
+
+        /* Datos entrada box */
+        .datos-entrada-box {
+            background: var(--bg-light);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .datos-entrada-box h4 {
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+            color: var(--primary);
+        }
+
+        .datos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 8px;
+        }
+
+        .dato-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+        }
+
+        .dato-label {
+            color: var(--text-secondary);
+        }
+
+        .dato-value {
+            font-weight: 600;
+            color: var(--primary);
         }
 
         /* Disclaimer */
@@ -576,26 +690,23 @@
             background: #FEF3C7;
             border: 1px solid #F59E0B;
             border-radius: 12px;
-            padding: 20px;
-            font-size: 0.85rem;
+            padding: 16px 20px;
+            font-size: 0.8rem;
             color: #92400E;
             margin-top: 24px;
         }
 
         .disclaimer-title {
             font-weight: 700;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            margin-bottom: 6px;
         }
 
-        /* Hidden elements */
+        /* Hidden */
         .hidden {
             display: none !important;
         }
 
-        /* Loading Spinner */
+        /* Spinner */
         .spinner {
             width: 20px;
             height: 20px;
@@ -611,61 +722,95 @@
 
         /* Responsive */
         @media (max-width: 600px) {
-            .container {
-                padding: 12px;
-            }
-
-            .card {
-                padding: 20px;
-            }
-
-            .header {
-                padding: 30px 16px;
-            }
-
-            .progress-step {
-                padding: 8px 14px;
-            }
-
-            .step-label {
-                display: none;
-            }
-
-            .btn {
-                width: 100%;
-            }
-
-            .btn-group {
-                flex-direction: column;
-            }
-
-            .gender-toggle {
-                flex-direction: column;
-            }
+            .container { padding: 12px; }
+            .card { padding: 20px; }
+            .header { padding: 30px 16px; }
+            .progress-step { padding: 8px 14px; }
+            .step-label { display: none; }
+            .btn { width: 100%; }
+            .btn-group { flex-direction: column; }
+            .gender-toggle { flex-direction: column; }
+            .resumen-grid { grid-template-columns: 1fr; }
+            .tooltip-text { width: 220px; left: 0; transform: translateX(0); }
         }
 
-        /* Print/PDF Styles */
+        /* ============================================ */
+        /* ESTILOS DE IMPRESIÓN                        */
+        /* ============================================ */
         @media print {
-            body {
-                background: white;
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
             }
-            
+
+            body {
+                background: white !important;
+                font-size: 11px;
+            }
+
+            .container {
+                max-width: 100%;
+                padding: 0;
+                margin: 0;
+            }
+
             .no-print {
                 display: none !important;
             }
-        }
 
-        /* Hijos field transition */
-        .hijos-field {
-            transition: all 0.3s ease;
-            overflow: hidden;
+            .header, .progress-container {
+                display: none !important;
+            }
+
+            .card {
+                box-shadow: none;
+                border-radius: 0;
+                padding: 20px;
+                margin: 0;
+                page-break-inside: avoid;
+            }
+
+            .resumen-ejecutivo {
+                background: #1a1a2e !important;
+                -webkit-print-color-adjust: exact;
+            }
+
+            .brecha-card {
+                background: #FF6B6B !important;
+            }
+
+            .info-box {
+                background: #f0fdf9 !important;
+                border: 2px solid #00D4AA !important;
+            }
+
+            .cta-box {
+                background: #1a1a2e !important;
+            }
+
+            .result-card {
+                break-inside: avoid;
+            }
+
+            .results-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .btn-group {
+                display: none !important;
+            }
+
+            @page {
+                margin: 1cm;
+                size: A4;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <!-- Header -->
-        <header class="header">
+        <header class="header no-print">
             <h1>📊 Calculadora de Pensión</h1>
             <p>Descubre cuánto recibirás en tu jubilación y cómo prepararte para el futuro</p>
         </header>
@@ -698,7 +843,7 @@
                         <label>Nombre completo</label>
                         <div class="tooltip-container">
                             <span class="tooltip-icon">?</span>
-                            <span class="tooltip-text">Ingresa tu nombre completo tal como aparece en tu documento de identidad. Esto nos ayuda a personalizar tu diagnóstico.</span>
+                            <span class="tooltip-text">Ingresa tu nombre completo. Esto nos ayuda a personalizar tu diagnóstico.</span>
                         </div>
                     </div>
                     <input type="text" id="nombre" placeholder="Ej: Juan Pérez García" required>
@@ -708,7 +853,7 @@
                         <label>Correo electrónico</label>
                         <div class="tooltip-container">
                             <span class="tooltip-icon">?</span>
-                            <span class="tooltip-text">Tu correo electrónico donde podremos enviarte información adicional sobre tu diagnóstico y estrategias de ahorro.</span>
+                            <span class="tooltip-text">Tu correo para enviarte información adicional sobre estrategias de ahorro.</span>
                         </div>
                     </div>
                     <input type="email" id="email" placeholder="tucorreo@ejemplo.com" required>
@@ -718,7 +863,7 @@
                         <label>Teléfono</label>
                         <div class="tooltip-container">
                             <span class="tooltip-icon">?</span>
-                            <span class="tooltip-text">Número de contacto para brindarte asesoría personalizada si lo deseas.</span>
+                            <span class="tooltip-text">Número de contacto para brindarte asesoría personalizada.</span>
                         </div>
                     </div>
                     <input type="tel" id="telefono" placeholder="300 123 4567" required>
@@ -728,7 +873,7 @@
                         <label>Género</label>
                         <div class="tooltip-container">
                             <span class="tooltip-icon">?</span>
-                            <span class="tooltip-text"><strong>Importante:</strong> La edad de pensión varía según género. Hombres: 62 años. Mujeres: 57 años. Además, las mujeres tienen beneficios adicionales por reducción de semanas.</span>
+                            <span class="tooltip-text"><strong>Importante:</strong> La edad de pensión varía. Hombres: 62 años. Mujeres: 57 años, con beneficios adicionales por hijos.</span>
                         </div>
                     </div>
                     <div class="gender-toggle">
@@ -751,17 +896,17 @@
                         <label>Edad actual</label>
                         <div class="tooltip-container">
                             <span class="tooltip-icon">?</span>
-                            <span class="tooltip-text">Tu edad actual en años cumplidos. Esto nos permite calcular cuántos años te faltan para llegar a la edad de pensión.</span>
+                            <span class="tooltip-text">Tu edad en años cumplidos para calcular cuántos años te faltan para pensionarte.</span>
                         </div>
                     </div>
                     <input type="number" id="edad" placeholder="35" min="18" max="70" required>
                 </div>
-                <div class="form-group hijos-field hidden" id="hijos-container">
+                <div class="form-group hidden" id="hijos-container">
                     <div class="label-row">
                         <label>Número de hijos</label>
                         <div class="tooltip-container">
                             <span class="tooltip-icon">?</span>
-                            <span class="tooltip-text"><strong>Beneficio para mujeres:</strong> Por cada hijo se reducen 50 semanas del requisito para pensionarse (máximo 3 hijos = 150 semanas menos).</span>
+                            <span class="tooltip-text"><strong>Beneficio mujeres:</strong> -50 semanas por hijo (máx 3 hijos = 150 semanas menos).</span>
                         </div>
                     </div>
                     <select id="hijos">
@@ -773,10 +918,7 @@
                 </div>
             </div>
             <div class="btn-group">
-                <button class="btn btn-primary" onclick="goToStep(2)">
-                    Continuar
-                    <span>→</span>
-                </button>
+                <button class="btn btn-primary" onclick="goToStep(2)">Continuar <span>→</span></button>
             </div>
         </div>
 
@@ -792,7 +934,7 @@
                         <label>IBL (Ingreso Base de Liquidación)</label>
                         <div class="tooltip-container">
                             <span class="tooltip-icon">?</span>
-                            <span class="tooltip-text"><strong>IBL:</strong> Es el promedio de los salarios sobre los cuales cotizaste durante los últimos 10 años. Si no lo conoces exactamente, puedes usar tu salario actual como referencia. Puedes consultarlo en tu historia laboral de Colpensiones.</span>
+                            <span class="tooltip-text"><strong>IBL:</strong> Promedio de salarios de los últimos 10 años. Si no lo conoces, usa tu salario actual. Consúltalo en tu historia laboral de Colpensiones.</span>
                         </div>
                     </div>
                     <input type="text" id="ibl" placeholder="$5.000.000" required>
@@ -802,7 +944,7 @@
                         <label>Semanas cotizadas</label>
                         <div class="tooltip-container">
                             <span class="tooltip-icon">?</span>
-                            <span class="tooltip-text"><strong>Semanas cotizadas:</strong> Total de semanas que has aportado a pensión durante tu vida laboral. Puedes consultarlas en tu historia laboral de Colpensiones o tu fondo privado. 1 año = aproximadamente 52 semanas.</span>
+                            <span class="tooltip-text"><strong>Semanas:</strong> Total aportado a pensión. Consúltalo en Colpensiones o tu fondo. 1 año ≈ 52 semanas.</span>
                         </div>
                     </div>
                     <input type="number" id="semanas" placeholder="800" min="0" max="3000" required>
@@ -812,36 +954,98 @@
                         <label>Salario Mínimo 2026</label>
                         <div class="tooltip-container">
                             <span class="tooltip-icon">?</span>
-                            <span class="tooltip-text"><strong>SMLV:</strong> Salario Mínimo Legal Vigente. Se usa como referencia para calcular la tasa de reemplazo y los topes de pensión. Puedes editarlo si cambia.</span>
+                            <span class="tooltip-text"><strong>SMLV:</strong> Se usa para calcular tasa de reemplazo y topes. Edítalo si cambia.</span>
                         </div>
                     </div>
                     <input type="text" id="smlv" value="$1.750.905">
                 </div>
             </div>
             <div class="btn-group">
-                <button class="btn btn-secondary" onclick="goToStep(1)">
-                    <span>←</span>
-                    Atrás
-                </button>
-                <button class="btn btn-primary" onclick="calcularPension()" id="btn-calcular">
-                    Ver mi diagnóstico
-                    <span>📊</span>
-                </button>
+                <button class="btn btn-secondary" onclick="goToStep(1)"><span>←</span> Atrás</button>
+                <button class="btn btn-primary" onclick="calcularPension()" id="btn-calcular">Ver mi diagnóstico <span>📊</span></button>
             </div>
         </div>
 
         <!-- Step 3: Resultados -->
         <div class="card hidden" id="step3">
             <div id="resultados-content">
-                <h2 class="card-title">
+                
+                <!-- Header para impresión -->
+                <div style="text-align: center; margin-bottom: 20px; display: none;" id="print-header">
+                    <h1 style="font-size: 1.5rem; color: var(--primary); margin-bottom: 5px;">📊 DIAGNÓSTICO PENSIONAL</h1>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Generado el <span id="print-fecha"></span></p>
+                </div>
+
+                <h2 class="card-title no-print">
                     <span class="card-title-icon">📋</span>
                     Tu Diagnóstico Pensional
                 </h2>
 
-                <!-- Nombre del usuario -->
-                <p style="margin-bottom: 20px; color: var(--text-secondary);">Diagnóstico generado para: <strong id="res-nombre" style="color: var(--primary);"></strong></p>
+                <p style="margin-bottom: 16px; color: var(--text-secondary);">
+                    Diagnóstico para: <strong id="res-nombre" style="color: var(--primary);"></strong> 
+                    <span id="print-fecha-inline" style="display: none;"> | <span id="print-fecha2"></span></span>
+                </p>
 
-                <!-- Resumen Personal -->
+                <!-- RESUMEN EJECUTIVO -->
+                <div class="resumen-ejecutivo">
+                    <h3>⚡ RESUMEN EJECUTIVO</h3>
+                    <div class="resumen-grid">
+                        <div class="resumen-item">
+                            <div class="resumen-item-label">Ingreso Actual</div>
+                            <div class="resumen-item-value" id="res-ingreso-actual">$0</div>
+                        </div>
+                        <div class="resumen-item">
+                            <div class="resumen-item-label">Mejor Pensión Estimada</div>
+                            <div class="resumen-item-value" id="res-mejor-pension">$0</div>
+                        </div>
+                        <div class="resumen-item alerta">
+                            <div class="resumen-item-label">Brecha Mensual</div>
+                            <div class="resumen-item-value" id="res-brecha-resumen">-$0</div>
+                        </div>
+                    </div>
+                    <div class="alerta-box">
+                        <p>
+                            <strong>⚠️ ATENCIÓN:</strong> Al pensionarte, tu ingreso pasará de <strong id="res-de"></strong> a aproximadamente <strong id="res-a"></strong>. 
+                            Esto representa una <strong>reducción del <span id="res-porcentaje">0</span>%</strong> en tu capacidad económica mensual.
+                        </p>
+                        <p style="margin-top: 10px;">
+                            <strong>Sin una estrategia de acumulación paralela, podrías enfrentar dificultades para mantener tu calidad de vida actual en el retiro.</strong>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Datos de entrada -->
+                <div class="datos-entrada-box">
+                    <h4>📋 Datos de Entrada</h4>
+                    <div class="datos-grid">
+                        <div class="dato-item">
+                            <span class="dato-label">Género:</span>
+                            <span class="dato-value" id="res-genero">-</span>
+                        </div>
+                        <div class="dato-item">
+                            <span class="dato-label">Edad actual:</span>
+                            <span class="dato-value" id="res-edad">- años</span>
+                        </div>
+                        <div class="dato-item">
+                            <span class="dato-label">IBL:</span>
+                            <span class="dato-value" id="res-ibl">$0</span>
+                        </div>
+                        <div class="dato-item">
+                            <span class="dato-label">Semanas cotizadas:</span>
+                            <span class="dato-value" id="res-semanas">0</span>
+                        </div>
+                        <div class="dato-item" id="res-hijos-container" style="display: none;">
+                            <span class="dato-label">Hijos (beneficio):</span>
+                            <span class="dato-value" id="res-hijos">0</span>
+                        </div>
+                        <div class="dato-item">
+                            <span class="dato-label">SMLV usado:</span>
+                            <span class="dato-value" id="res-smlv">$0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Situación pensional -->
                 <div class="summary-stats">
                     <div class="stat-item">
                         <div class="stat-value" id="res-edad-pension">62</div>
@@ -859,12 +1063,15 @@
                         <div class="stat-value" id="res-semanas-faltantes">500</div>
                         <div class="stat-label">Semanas faltantes</div>
                     </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="res-ano-pension">2050</div>
+                        <div class="stat-label">Año de pensión</div>
+                    </div>
                 </div>
 
                 <!-- Comparativo de Escenarios -->
-                <h3 style="margin-bottom: 16px; color: var(--primary);">Comparativo de Escenarios</h3>
+                <h3 style="margin-bottom: 16px; color: var(--primary); font-size: 1.1rem;">💰 Comparativo de Escenarios</h3>
                 <div class="results-grid">
-                    <!-- Colpensiones -->
                     <div class="result-card">
                         <div class="result-header">
                             <div class="result-icon colpensiones">🏛️</div>
@@ -874,10 +1081,9 @@
                             </div>
                         </div>
                         <div class="result-value" id="res-colpensiones">$0</div>
-                        <div class="result-range">Tasa de reemplazo: <span id="res-tasa-colp">0%</span></div>
+                        <div class="result-range">Tasa: <span id="res-tasa-colp">0%</span></div>
                     </div>
 
-                    <!-- Fondo Privado -->
                     <div class="result-card">
                         <div class="result-header">
                             <div class="result-icon privado">🏦</div>
@@ -890,88 +1096,83 @@
                         <div class="result-range">Rango: <span id="res-privado-conservador">$0</span> - <span id="res-privado-optimista-2">$0</span></div>
                     </div>
 
-                    <!-- Reforma -->
                     <div class="result-card highlight">
                         <div class="result-header">
                             <div class="result-icon reforma">⚖️</div>
                             <div>
                                 <div class="result-title">Reforma Pensional</div>
-                                <div class="result-subtitle">Sistema Mixto (2.5 SMLV + Excedente)</div>
+                                <div class="result-subtitle">Sistema Mixto</div>
                             </div>
                         </div>
                         <div class="result-value" id="res-reforma-optimista">$0</div>
                         <div class="result-range">Rango: <span id="res-reforma-conservador">$0</span> - <span id="res-reforma-optimista-2">$0</span></div>
-                        <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); font-size: 0.85rem;">
+                        <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); font-size: 0.8rem;">
                             <div>Parte Colpensiones: <strong id="res-reforma-colp">$0</strong></div>
-                            <div>Parte Fondo Privado: <strong id="res-reforma-priv">$0 - $0</strong></div>
+                            <div>Parte Privado: <strong id="res-reforma-priv">$0 - $0</strong></div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Brecha Pensional -->
+                <!-- Brecha Pensional destacada -->
                 <div class="brecha-card">
                     <h3>⚠️ Tu Brecha Pensional Mensual</h3>
-                    <div class="brecha-value" id="res-brecha">-$3.436.000</div>
+                    <div class="brecha-value" id="res-brecha">-$0</div>
                     <p class="brecha-text">Esta es la diferencia entre tu ingreso actual y tu mejor pensión estimada. Para mantener tu calidad de vida, necesitas cubrir esta brecha.</p>
+                    <div class="porcentaje-reduccion">
+                        📉 Reducción del <strong id="res-porcentaje-2">0</strong>% de tu ingreso
+                    </div>
                 </div>
 
                 <!-- Recomendación -->
                 <div class="info-box">
-                    <h4>💡 Recomendación: Acumulación Paralela</h4>
-                    <p style="margin-bottom: 12px;">Para cerrar tu brecha pensional y mantener o mejorar tu calidad de vida, considera estas estrategias:</p>
-                    <ul>
-                        <li>Ahorro voluntario en pensiones</li>
-                        <li>Fondos de inversión colectiva</li>
-                        <li>Inversiones en propiedad raíz</li>
-                        <li>Portafolios diversificados en bolsa</li>
-                        <li>Fondos de capital privado</li>
-                    </ul>
+                    <h4>💡 ¿Cómo cerrar esta brecha?</h4>
+                    <p>Tienes <strong id="res-anos-restantes-2">0</strong> años para construir un patrimonio que complemente tu pensión. La clave está en comenzar <strong>HOY</strong> con una estrategia de acumulación paralela:</p>
+                    <div class="estrategias-grid">
+                        <span class="estrategia-tag">✓ Pensión Voluntaria</span>
+                        <span class="estrategia-tag">✓ Fondos de Inversión</span>
+                        <span class="estrategia-tag">✓ Propiedad Raíz</span>
+                        <span class="estrategia-tag">✓ Bolsa de Valores</span>
+                        <span class="estrategia-tag">✓ Capital Privado</span>
+                    </div>
+                </div>
+
+                <!-- CTA -->
+                <div class="cta-box">
+                    <h4>¿Quieres un plan personalizado para asegurar tu retiro?</h4>
+                    <p>Agenda una asesoría con nuestro equipo de expertos y descubre las mejores alternativas de inversión para tu perfil.</p>
                 </div>
 
                 <!-- Disclaimer -->
                 <div class="disclaimer">
-                    <div class="disclaimer-title">⚠️ Aviso Legal Importante</div>
-                    <p>Esta es una <strong>proyección estimada con fines educativos</strong>. Las condiciones laborales, normativas y reformas pensionales pueden cambiar en el futuro. Este cálculo <strong>no constituye asesoría financiera formal</strong>. Los porcentajes del fondo privado (40%-45%) son estimaciones conservadoras basadas en promedios históricos del mercado. Para decisiones importantes sobre tu pensión, consulta con un profesional certificado.</p>
+                    <div class="disclaimer-title">⚠️ Aviso Legal</div>
+                    <p>Esta es una proyección estimada con fines educativos. Las condiciones laborales, normativas y reformas pensionales pueden cambiar. Este cálculo no constituye asesoría financiera formal. Los porcentajes del fondo privado (40%-45%) son estimaciones conservadoras. Consulta con un profesional certificado.</p>
                 </div>
             </div>
 
             <div class="btn-group no-print">
-                <button class="btn btn-secondary" onclick="goToStep(2)">
-                    <span>←</span>
-                    Modificar datos
-                </button>
-                <button class="btn btn-download" onclick="descargarPDF()">
-                    <span>📥</span>
-                    Descargar diagnóstico PDF
-                </button>
+                <button class="btn btn-secondary" onclick="goToStep(2)"><span>←</span> Modificar datos</button>
+                <button class="btn btn-download" onclick="imprimirDiagnostico()"><span>🖨️</span> Imprimir / Guardar PDF</button>
             </div>
         </div>
     </div>
 
     <script>
-        // ============================================
-        // CONFIGURACIÓN - GOOGLE SHEETS ENDPOINT
-        // ============================================
+        // Google Sheets endpoint
         const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzX-LMsgHtUd30MaSoJQoECfAe8X2Y-8ICJFGpBvUF9rjuIUv4gpg2MsB6Yg-10R1HUmw/exec';
 
-        // Variables globales para resultados
         let resultadosCalculados = {};
 
-        // ============================================
-        // UTILIDADES DE FORMATO
-        // ============================================
-        
-        // Formatear número como moneda colombiana
+        // Formatear moneda
         function formatCurrency(num) {
             return '$' + Math.round(num).toLocaleString('es-CO');
         }
 
-        // Parsear moneda a número
+        // Parsear moneda
         function parseCurrency(str) {
             return parseInt(str.replace(/[^\d]/g, '')) || 0;
         }
 
-        // Formatear input de moneda mientras escribe
+        // Formatear input moneda
         function formatCurrencyInput(input) {
             let value = input.value.replace(/[^\d]/g, '');
             if (value) {
@@ -979,27 +1180,15 @@
             }
         }
 
-        // ============================================
-        // EVENT LISTENERS
-        // ============================================
+        // Event listeners
+        document.getElementById('ibl').addEventListener('input', function() { formatCurrencyInput(this); });
+        document.getElementById('smlv').addEventListener('input', function() { formatCurrencyInput(this); });
 
-        // Formateo de moneda en inputs
-        document.getElementById('ibl').addEventListener('input', function() {
-            formatCurrencyInput(this);
-        });
-
-        document.getElementById('smlv').addEventListener('input', function() {
-            formatCurrencyInput(this);
-        });
-
-        // Manejar selección de género
         document.querySelectorAll('.gender-option').forEach(option => {
             option.addEventListener('click', function() {
                 document.querySelectorAll('.gender-option').forEach(o => o.classList.remove('selected'));
                 this.classList.add('selected');
                 this.querySelector('input').checked = true;
-
-                // Mostrar/ocultar campo de hijos
                 const hijosContainer = document.getElementById('hijos-container');
                 if (this.querySelector('input').value === 'Mujer') {
                     hijosContainer.classList.remove('hidden');
@@ -1009,38 +1198,19 @@
             });
         });
 
-        // ============================================
-        // NAVEGACIÓN ENTRE PASOS
-        // ============================================
-
+        // Navegación
         function goToStep(step) {
-            // Validar paso actual antes de avanzar
             if (step === 2 && !validarPaso1()) return;
-
-            // Ocultar todos los pasos
             document.querySelectorAll('.card').forEach(card => card.classList.add('hidden'));
-            
-            // Mostrar paso seleccionado
             document.getElementById('step' + step).classList.remove('hidden');
-
-            // Actualizar indicadores de progreso
             for (let i = 1; i <= 3; i++) {
                 const progressStep = document.getElementById('progress-' + i);
                 progressStep.classList.remove('active', 'completed');
-                if (i < step) {
-                    progressStep.classList.add('completed');
-                } else if (i === step) {
-                    progressStep.classList.add('active');
-                }
+                if (i < step) progressStep.classList.add('completed');
+                else if (i === step) progressStep.classList.add('active');
             }
-
-            // Scroll al inicio
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-
-        // ============================================
-        // VALIDACIONES
-        // ============================================
 
         function validarPaso1() {
             const nombre = document.getElementById('nombre').value.trim();
@@ -1048,32 +1218,11 @@
             const telefono = document.getElementById('telefono').value.trim();
             const genero = document.querySelector('input[name="genero"]:checked');
             const edad = document.getElementById('edad').value;
-
-            if (!nombre) {
-                alert('Por favor ingresa tu nombre completo');
-                document.getElementById('nombre').focus();
-                return false;
-            }
-            if (!email || !email.includes('@')) {
-                alert('Por favor ingresa un correo electrónico válido');
-                document.getElementById('email').focus();
-                return false;
-            }
-            if (!telefono) {
-                alert('Por favor ingresa tu número de teléfono');
-                document.getElementById('telefono').focus();
-                return false;
-            }
-            if (!genero) {
-                alert('Por favor selecciona tu género');
-                return false;
-            }
-            if (!edad || edad < 18 || edad > 70) {
-                alert('Por favor ingresa una edad válida (18-70 años)');
-                document.getElementById('edad').focus();
-                return false;
-            }
-
+            if (!nombre) { alert('Ingresa tu nombre completo'); return false; }
+            if (!email || !email.includes('@')) { alert('Ingresa un correo válido'); return false; }
+            if (!telefono) { alert('Ingresa tu teléfono'); return false; }
+            if (!genero) { alert('Selecciona tu género'); return false; }
+            if (!edad || edad < 18 || edad > 70) { alert('Ingresa una edad válida (18-70)'); return false; }
             return true;
         }
 
@@ -1081,63 +1230,25 @@
             const ibl = parseCurrency(document.getElementById('ibl').value);
             const semanas = parseInt(document.getElementById('semanas').value);
             const smlv = parseCurrency(document.getElementById('smlv').value);
-
-            if (!ibl || ibl < 1) {
-                alert('Por favor ingresa tu Ingreso Base de Liquidación (IBL)');
-                document.getElementById('ibl').focus();
-                return false;
-            }
-            if (isNaN(semanas) || semanas < 0) {
-                alert('Por favor ingresa tus semanas cotizadas');
-                document.getElementById('semanas').focus();
-                return false;
-            }
-            if (!smlv || smlv < 1) {
-                alert('Por favor verifica el salario mínimo');
-                document.getElementById('smlv').focus();
-                return false;
-            }
-
+            if (!ibl) { alert('Ingresa tu IBL'); return false; }
+            if (isNaN(semanas) || semanas < 0) { alert('Ingresa tus semanas cotizadas'); return false; }
+            if (!smlv) { alert('Verifica el salario mínimo'); return false; }
             return true;
         }
 
-        // ============================================
-        // CÁLCULO DE SEMANAS PARA MUJERES
-        // ============================================
-
         function calcularSemanasRequeridasMujer(anoPension, hijos) {
-            const anoBase = 2025;
-            const semanasBase = 1300;
-            const reduccionPorAno = 25;
-            const semanasMinimas = 1000;
-            const reduccionPorHijo = 50;
-            const maxHijos = 3;
-
-            let anosTranscurridos = anoPension - anoBase;
-            if (anosTranscurridos < 0) anosTranscurridos = 0;
-
-            let semanasAno = semanasBase - (anosTranscurridos * reduccionPorAno);
-            if (semanasAno < semanasMinimas) semanasAno = semanasMinimas;
-
-            // Aplicar reducción por hijos
-            const hijosAplicables = Math.min(hijos, maxHijos);
-            let semanasFinales = semanasAno - (hijosAplicables * reduccionPorHijo);
-
-            return Math.max(semanasFinales, 850); // Mínimo razonable
+            const anoBase = 2025, semanasBase = 1300, reduccionPorAno = 25, semanasMinimas = 1000;
+            let anosTranscurridos = Math.max(0, anoPension - anoBase);
+            let semanasAno = Math.max(semanasMinimas, semanasBase - (anosTranscurridos * reduccionPorAno));
+            return Math.max(850, semanasAno - (Math.min(hijos, 3) * 50));
         }
-
-        // ============================================
-        // CÁLCULO PRINCIPAL DE PENSIÓN
-        // ============================================
 
         function calcularPension() {
             if (!validarPaso2()) return;
-
             const btn = document.getElementById('btn-calcular');
-            btn.innerHTML = '<span class="spinner"></span> Enviando datos...';
+            btn.innerHTML = '<span class="spinner"></span> Calculando...';
             btn.disabled = true;
 
-            // Obtener datos del formulario
             const nombre = document.getElementById('nombre').value.trim();
             const email = document.getElementById('email').value.trim();
             const telefono = document.getElementById('telefono').value.trim();
@@ -1148,92 +1259,47 @@
             const semanasCotizadas = parseInt(document.getElementById('semanas').value);
             const smlv = parseCurrency(document.getElementById('smlv').value);
 
-            // Calcular edad de pensión y años restantes
             const edadPension = genero === 'Hombre' ? 62 : 57;
             const anosRestantes = Math.max(0, edadPension - edad);
             const anoActual = 2026;
             const anoPension = anoActual + anosRestantes;
 
-            // Calcular semanas requeridas
-            let semanasRequeridas;
-            if (genero === 'Hombre') {
-                semanasRequeridas = 1300;
-            } else {
-                semanasRequeridas = calcularSemanasRequeridasMujer(anoPension, hijos);
-            }
-
+            let semanasRequeridas = genero === 'Hombre' ? 1300 : calcularSemanasRequeridasMujer(anoPension, hijos);
             const semanasFaltantes = Math.max(0, semanasRequeridas - semanasCotizadas);
 
-            // ========== ESCENARIO 1: COLPENSIONES ==========
+            // Colpensiones
             const S = ibl / smlv;
             let R = 65.5 - (0.5 * S);
-            
-            // Semanas adicionales (máximo 1800)
             const semanasParaCalculo = Math.min(semanasCotizadas, 1800);
             const semanasAdicionales = Math.max(0, semanasParaCalculo - semanasRequeridas);
-            const bloques = Math.floor(semanasAdicionales / 50);
-            const adicional = bloques * 1.5;
-
+            const adicional = Math.floor(semanasAdicionales / 50) * 1.5;
             const tasaFinalColp = R + adicional;
             let pensionColpensiones = ibl * (tasaFinalColp / 100);
+            const pensionMinima = smlv, pensionMaxima = smlv * 25;
+            pensionColpensiones = Math.max(pensionMinima, Math.min(pensionMaxima, pensionColpensiones));
 
-            // Aplicar topes
-            const pensionMinima = smlv;
-            const pensionMaxima = smlv * 25;
+            // Fondo Privado
+            let pensionPrivadoConservador = Math.max(pensionMinima, Math.min(pensionMaxima, ibl * 0.40));
+            let pensionPrivadoOptimista = Math.max(pensionMinima, Math.min(pensionMaxima, ibl * 0.45));
 
-            if (pensionColpensiones < pensionMinima) pensionColpensiones = pensionMinima;
-            if (pensionColpensiones > pensionMaxima) pensionColpensiones = pensionMaxima;
-
-            // ========== ESCENARIO 2: FONDO PRIVADO ==========
-            let pensionPrivadoConservador = ibl * 0.40;
-            let pensionPrivadoOptimista = ibl * 0.45;
-
-            // Aplicar topes
-            if (pensionPrivadoConservador < pensionMinima) pensionPrivadoConservador = pensionMinima;
-            if (pensionPrivadoConservador > pensionMaxima) pensionPrivadoConservador = pensionMaxima;
-            if (pensionPrivadoOptimista < pensionMinima) pensionPrivadoOptimista = pensionMinima;
-            if (pensionPrivadoOptimista > pensionMaxima) pensionPrivadoOptimista = pensionMaxima;
-
-            // ========== ESCENARIO 3: REFORMA (MIXTO) ==========
+            // Reforma
             const limiteColpensiones = smlv * 2.5;
             const iblColpensiones = Math.min(ibl, limiteColpensiones);
             const iblPrivado = Math.max(0, ibl - limiteColpensiones);
-
-            // Parte Colpensiones (sobre primeros 2.5 SMLV)
             const S_reforma = iblColpensiones / smlv;
             let R_reforma = 65.5 - (0.5 * S_reforma);
-            const tasaFinalReformaColp = R_reforma + adicional;
-            let pensionReformaColp = iblColpensiones * (tasaFinalReformaColp / 100);
-
-            // Parte Fondo Privado (sobre excedente)
+            let pensionReformaColp = iblColpensiones * ((R_reforma + adicional) / 100);
             let pensionReformaPrivConservador = iblPrivado * 0.40;
             let pensionReformaPrivOptimista = iblPrivado * 0.45;
+            let pensionReformaTotalConservador = Math.max(pensionMinima, Math.min(pensionMaxima, pensionReformaColp + pensionReformaPrivConservador));
+            let pensionReformaTotalOptimista = Math.max(pensionMinima, Math.min(pensionMaxima, pensionReformaColp + pensionReformaPrivOptimista));
 
-            // Total Reforma
-            let pensionReformaTotalConservador = pensionReformaColp + pensionReformaPrivConservador;
-            let pensionReformaTotalOptimista = pensionReformaColp + pensionReformaPrivOptimista;
-
-            // Aplicar topes al total
-            if (pensionReformaTotalConservador < pensionMinima) pensionReformaTotalConservador = pensionMinima;
-            if (pensionReformaTotalConservador > pensionMaxima) pensionReformaTotalConservador = pensionMaxima;
-            if (pensionReformaTotalOptimista < pensionMinima) pensionReformaTotalOptimista = pensionMinima;
-            if (pensionReformaTotalOptimista > pensionMaxima) pensionReformaTotalOptimista = pensionMaxima;
-
-            // ========== BRECHA PENSIONAL ==========
             const mejorPension = Math.max(pensionColpensiones, pensionPrivadoOptimista, pensionReformaTotalOptimista);
             const brechaPensional = ibl - mejorPension;
+            const porcentajeReduccion = ((brechaPensional / ibl) * 100).toFixed(0);
 
-            // Guardar resultados
             resultadosCalculados = {
-                nombre,
-                email,
-                telefono,
-                genero,
-                edad,
-                hijos,
-                ibl,
-                semanasCotizadas,
-                smlv,
+                nombre, email, telefono, genero, edad, hijos, ibl, semanasCotizadas, smlv,
                 pensionColpensiones: Math.round(pensionColpensiones),
                 pensionPrivadoConservador: Math.round(pensionPrivadoConservador),
                 pensionPrivadoOptimista: Math.round(pensionPrivadoOptimista),
@@ -1241,80 +1307,64 @@
                 pensionReformaOptimista: Math.round(pensionReformaTotalOptimista),
                 brechaPensional: Math.round(brechaPensional),
                 anoEstimadoPension: anoPension,
-                semanasRequeridas,
-                semanasFaltantes,
-                edadPension,
-                anosRestantes,
-                tasaFinalColp,
+                semanasRequeridas, semanasFaltantes, edadPension, anosRestantes, tasaFinalColp,
                 pensionReformaColp: Math.round(pensionReformaColp),
                 pensionReformaPrivConservador: Math.round(pensionReformaPrivConservador),
-                pensionReformaPrivOptimista: Math.round(pensionReformaPrivOptimista)
+                pensionReformaPrivOptimista: Math.round(pensionReformaPrivOptimista),
+                mejorPension: Math.round(mejorPension),
+                porcentajeReduccion
             };
 
-            // PRIMERO enviar a Google Sheets, LUEGO mostrar resultados
             enviarAGoogleSheets(resultadosCalculados)
-                .then(() => {
-                    console.log('Datos enviados correctamente a Google Sheets');
-                    mostrarResultados(resultadosCalculados);
-                    goToStep(3);
-                })
-                .catch(error => {
-                    console.error('Error al enviar datos:', error);
-                    // Aún así mostrar resultados si falla el envío
-                    mostrarResultados(resultadosCalculados);
-                    goToStep(3);
-                })
-                .finally(() => {
-                    btn.innerHTML = 'Ver mi diagnóstico <span>📊</span>';
-                    btn.disabled = false;
-                });
+                .then(() => { mostrarResultados(resultadosCalculados); goToStep(3); })
+                .catch(() => { mostrarResultados(resultadosCalculados); goToStep(3); })
+                .finally(() => { btn.innerHTML = 'Ver mi diagnóstico <span>📊</span>'; btn.disabled = false; });
         }
-
-        // ============================================
-        // ENVÍO A GOOGLE SHEETS
-        // ============================================
 
         async function enviarAGoogleSheets(datos) {
             try {
-                const response = await fetch(GOOGLE_SHEETS_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                await fetch(GOOGLE_SHEETS_URL, {
+                    method: 'POST', mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(datos)
                 });
-                return true;
-            } catch (error) {
-                console.error('Error enviando a Google Sheets:', error);
-                throw error;
-            }
+            } catch (e) { console.error(e); }
         }
 
-        // ============================================
-        // MOSTRAR RESULTADOS
-        // ============================================
-
         function mostrarResultados(res) {
-            // Nombre del usuario
-            document.getElementById('res-nombre').textContent = res.nombre;
+            // Resumen ejecutivo
+            document.getElementById('res-ingreso-actual').textContent = formatCurrency(res.ibl);
+            document.getElementById('res-mejor-pension').textContent = formatCurrency(res.mejorPension);
+            document.getElementById('res-brecha-resumen').textContent = '-' + formatCurrency(Math.abs(res.brechaPensional));
+            document.getElementById('res-de').textContent = formatCurrency(res.ibl);
+            document.getElementById('res-a').textContent = formatCurrency(res.mejorPension);
+            document.getElementById('res-porcentaje').textContent = Math.abs(res.porcentajeReduccion);
 
-            // Resumen stats
+            // Datos entrada
+            document.getElementById('res-nombre').textContent = res.nombre;
+            document.getElementById('res-genero').textContent = res.genero;
+            document.getElementById('res-edad').textContent = res.edad + ' años';
+            document.getElementById('res-ibl').textContent = formatCurrency(res.ibl);
+            document.getElementById('res-semanas').textContent = res.semanasCotizadas.toLocaleString('es-CO');
+            document.getElementById('res-smlv').textContent = formatCurrency(res.smlv);
+            if (res.genero === 'Mujer') {
+                document.getElementById('res-hijos-container').style.display = 'flex';
+                document.getElementById('res-hijos').textContent = res.hijos;
+            }
+
+            // Situación
             document.getElementById('res-edad-pension').textContent = res.edadPension;
             document.getElementById('res-anos-restantes').textContent = res.anosRestantes;
             document.getElementById('res-semanas-req').textContent = res.semanasRequeridas.toLocaleString('es-CO');
             document.getElementById('res-semanas-faltantes').textContent = res.semanasFaltantes > 0 ? res.semanasFaltantes.toLocaleString('es-CO') : '✓ Cumple';
+            document.getElementById('res-ano-pension').textContent = res.anoEstimadoPension;
 
-            // Colpensiones
+            // Escenarios
             document.getElementById('res-colpensiones').textContent = formatCurrency(res.pensionColpensiones);
             document.getElementById('res-tasa-colp').textContent = res.tasaFinalColp.toFixed(2) + '%';
-
-            // Fondo Privado
             document.getElementById('res-privado-optimista').textContent = formatCurrency(res.pensionPrivadoOptimista);
             document.getElementById('res-privado-conservador').textContent = formatCurrency(res.pensionPrivadoConservador);
             document.getElementById('res-privado-optimista-2').textContent = formatCurrency(res.pensionPrivadoOptimista);
-
-            // Reforma
             document.getElementById('res-reforma-optimista').textContent = formatCurrency(res.pensionReformaOptimista);
             document.getElementById('res-reforma-conservador').textContent = formatCurrency(res.pensionReformaConservador);
             document.getElementById('res-reforma-optimista-2').textContent = formatCurrency(res.pensionReformaOptimista);
@@ -1322,209 +1372,24 @@
             document.getElementById('res-reforma-priv').textContent = formatCurrency(res.pensionReformaPrivConservador) + ' - ' + formatCurrency(res.pensionReformaPrivOptimista);
 
             // Brecha
-            const brechaElement = document.getElementById('res-brecha');
-            if (res.brechaPensional > 0) {
-                brechaElement.textContent = '-' + formatCurrency(res.brechaPensional);
-            } else {
-                brechaElement.textContent = formatCurrency(Math.abs(res.brechaPensional));
-                brechaElement.style.color = '#00D4AA';
-            }
+            document.getElementById('res-brecha').textContent = '-' + formatCurrency(Math.abs(res.brechaPensional));
+            document.getElementById('res-porcentaje-2').textContent = Math.abs(res.porcentajeReduccion);
+            document.getElementById('res-anos-restantes-2').textContent = res.anosRestantes;
+
+            // Fecha
+            const fecha = new Date().toLocaleDateString('es-CO', { year: 'numeric', month: 'long', day: 'numeric' });
+            document.getElementById('print-fecha').textContent = fecha;
+            document.getElementById('print-fecha2').textContent = fecha;
         }
 
-
-        // ============================================
-        // DESCARGAR PDF
-        // ============================================
-
-        function descargarPDF() {
-            const res = resultadosCalculados;
-            const nombre = res.nombre.replace(/\s+/g, '_');
-            const fechaGeneracion = new Date().toLocaleDateString('es-CO', { 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
-            });
-
-            // Calcular porcentaje de brecha
-            const porcentajeBrecha = ((res.brechaPensional / res.ibl) * 100).toFixed(0);
-            const mejorPension = Math.max(res.pensionColpensiones, res.pensionPrivadoOptimista, res.pensionReformaOptimista);
-
-            // Crear contenedor temporal para el PDF
-            const pdfContainer = document.createElement('div');
-            pdfContainer.id = 'pdf-container';
-            pdfContainer.style.cssText = 'position: absolute; left: -9999px; top: 0; width: 794px; background: white;';
-            
-            pdfContainer.innerHTML = `
-                <div style="font-family: Helvetica, Arial, sans-serif; color: #1a1a2e; padding: 30px; font-size: 11px; line-height: 1.4; background: white;">
-                    
-                    <!-- HEADER -->
-                    <div style="text-align: center; padding-bottom: 15px; border-bottom: 3px solid #00D4AA; margin-bottom: 20px;">
-                        <h1 style="font-size: 26px; color: #1a1a2e; margin: 0 0 5px 0; font-weight: bold;">DIAGNÓSTICO PENSIONAL</h1>
-                        <p style="color: #666; font-size: 12px; margin: 0;">Generado el ${fechaGeneracion} para <strong style="color: #1a1a2e;">${res.nombre}</strong></p>
-                    </div>
-
-                    <!-- RESUMEN EJECUTIVO -->
-                    <div style="background: #1a1a2e; color: white; padding: 20px; border-radius: 12px; margin-bottom: 18px;">
-                        <h2 style="margin: 0 0 15px 0; font-size: 15px; color: #00D4AA; font-weight: bold;">⚡ RESUMEN EJECUTIVO</h2>
-                        
-                        <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
-                            <tr>
-                                <td style="width: 33%; text-align: center; background: rgba(255,255,255,0.1); padding: 12px; border-radius: 8px;">
-                                    <div style="font-size: 11px; opacity: 0.8; margin-bottom: 5px;">Ingreso Actual</div>
-                                    <div style="font-size: 20px; font-weight: bold;">${formatCurrency(res.ibl)}</div>
-                                </td>
-                                <td style="width: 5%;"></td>
-                                <td style="width: 33%; text-align: center; background: rgba(255,255,255,0.1); padding: 12px; border-radius: 8px;">
-                                    <div style="font-size: 11px; opacity: 0.8; margin-bottom: 5px;">Mejor Pensión Estimada</div>
-                                    <div style="font-size: 20px; font-weight: bold;">${formatCurrency(mejorPension)}</div>
-                                </td>
-                                <td style="width: 5%;"></td>
-                                <td style="width: 33%; text-align: center; background: rgba(255,107,107,0.3); padding: 12px; border-radius: 8px; border: 2px solid #FF6B6B;">
-                                    <div style="font-size: 11px; opacity: 0.9; margin-bottom: 5px;">Brecha Mensual</div>
-                                    <div style="font-size: 20px; font-weight: bold; color: #FF6B6B;">-${formatCurrency(Math.abs(res.brechaPensional))}</div>
-                                </td>
-                            </tr>
-                        </table>
-
-                        <div style="background: rgba(255,107,107,0.2); border-left: 4px solid #FF6B6B; padding: 12px 15px; border-radius: 0 8px 8px 0;">
-                            <p style="margin: 0; font-size: 12px; line-height: 1.6;">
-                                <strong style="color: #FF6B6B;">⚠️ ATENCIÓN:</strong> Al pensionarte, tu ingreso pasará de <strong>${formatCurrency(res.ibl)}</strong> a aproximadamente <strong>${formatCurrency(mejorPension)}</strong>. 
-                                Esto representa una <strong>reducción del ${Math.abs(porcentajeBrecha)}%</strong> en tu capacidad económica mensual.
-                            </p>
-                            <p style="margin: 10px 0 0 0; font-size: 12px; line-height: 1.5;">
-                                <strong>Sin una estrategia de acumulación paralela, podrías enfrentar dificultades para mantener tu calidad de vida actual en el retiro.</strong>
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- DATOS Y SITUACIÓN -->
-                    <table style="width: 100%; margin-bottom: 15px; border-collapse: collapse;">
-                        <tr>
-                            <td style="width: 48%; vertical-align: top; background: #f8f9fa; padding: 12px; border-radius: 8px; border: 1px solid #e9ecef;">
-                                <h3 style="margin: 0 0 10px 0; font-size: 12px; color: #1a1a2e; border-bottom: 1px solid #dee2e6; padding-bottom: 6px;">📋 Datos de Entrada</h3>
-                                <table style="width: 100%; font-size: 11px;">
-                                    <tr><td style="color: #666; padding: 3px 0;">Género:</td><td style="text-align: right; font-weight: 600;">${res.genero}</td></tr>
-                                    <tr><td style="color: #666; padding: 3px 0;">Edad actual:</td><td style="text-align: right; font-weight: 600;">${res.edad} años</td></tr>
-                                    <tr><td style="color: #666; padding: 3px 0;">IBL:</td><td style="text-align: right; font-weight: 600;">${formatCurrency(res.ibl)}</td></tr>
-                                    <tr><td style="color: #666; padding: 3px 0;">Semanas cotizadas:</td><td style="text-align: right; font-weight: 600;">${res.semanasCotizadas.toLocaleString('es-CO')}</td></tr>
-                                    ${res.genero === 'Mujer' ? `<tr><td style="color: #666; padding: 3px 0;">Hijos (beneficio):</td><td style="text-align: right; font-weight: 600;">${res.hijos}</td></tr>` : ''}
-                                </table>
-                            </td>
-                            <td style="width: 4%;"></td>
-                            <td style="width: 48%; vertical-align: top; background: #f8f9fa; padding: 12px; border-radius: 8px; border: 1px solid #e9ecef;">
-                                <h3 style="margin: 0 0 10px 0; font-size: 12px; color: #1a1a2e; border-bottom: 1px solid #dee2e6; padding-bottom: 6px;">📈 Tu Situación Pensional</h3>
-                                <table style="width: 100%; font-size: 11px;">
-                                    <tr><td style="color: #666; padding: 3px 0;">Edad de pensión:</td><td style="text-align: right; font-weight: 600;">${res.edadPension} años</td></tr>
-                                    <tr><td style="color: #666; padding: 3px 0;">Años restantes:</td><td style="text-align: right; font-weight: 600;">${res.anosRestantes} años</td></tr>
-                                    <tr><td style="color: #666; padding: 3px 0;">Semanas requeridas:</td><td style="text-align: right; font-weight: 600;">${res.semanasRequeridas.toLocaleString('es-CO')}</td></tr>
-                                    <tr><td style="color: #666; padding: 3px 0;">Semanas faltantes:</td><td style="text-align: right; font-weight: 600; ${res.semanasFaltantes > 0 ? 'color: #FF6B6B;' : 'color: #00a884;'}">${res.semanasFaltantes > 0 ? res.semanasFaltantes.toLocaleString('es-CO') : '✓ Cumple'}</td></tr>
-                                    <tr><td style="color: #666; padding: 3px 0;">Año estimado pensión:</td><td style="text-align: right; font-weight: 600;">${res.anoEstimadoPension}</td></tr>
-                                </table>
-                            </td>
-                        </tr>
-                    </table>
-
-                    <!-- COMPARATIVO DE ESCENARIOS -->
-                    <h3 style="margin: 0 0 12px 0; font-size: 14px; color: #1a1a2e; border-bottom: 2px solid #e9ecef; padding-bottom: 6px; font-weight: bold;">💰 Comparativo de Escenarios de Pensión</h3>
-                    
-                    <table style="width: 100%; margin-bottom: 18px; border-collapse: collapse;">
-                        <tr>
-                            <!-- Colpensiones -->
-                            <td style="width: 32%; vertical-align: top; border: 2px solid #e9ecef; border-radius: 8px; padding: 12px; background: #fff;">
-                                <div style="font-size: 11px; color: #666; margin-bottom: 3px; font-weight: bold;">🏛️ COLPENSIONES</div>
-                                <div style="font-size: 9px; color: #999; margin-bottom: 10px;">Régimen de Prima Media</div>
-                                <div style="font-size: 22px; font-weight: bold; color: #1a1a2e; margin-bottom: 6px;">${formatCurrency(res.pensionColpensiones)}</div>
-                                <div style="font-size: 10px; color: #666;">Tasa de reemplazo: ${res.tasaFinalColp.toFixed(2)}%</div>
-                            </td>
-                            <td style="width: 2%;"></td>
-                            <!-- Fondo Privado -->
-                            <td style="width: 32%; vertical-align: top; border: 2px solid #e9ecef; border-radius: 8px; padding: 12px; background: #fff;">
-                                <div style="font-size: 11px; color: #666; margin-bottom: 3px; font-weight: bold;">🏦 FONDO PRIVADO</div>
-                                <div style="font-size: 9px; color: #999; margin-bottom: 10px;">Ahorro Individual (RAIS)</div>
-                                <div style="font-size: 22px; font-weight: bold; color: #1a1a2e; margin-bottom: 6px;">${formatCurrency(res.pensionPrivadoOptimista)}</div>
-                                <div style="font-size: 10px; color: #666;">Rango: ${formatCurrency(res.pensionPrivadoConservador)} - ${formatCurrency(res.pensionPrivadoOptimista)}</div>
-                            </td>
-                            <td style="width: 2%;"></td>
-                            <!-- Reforma -->
-                            <td style="width: 32%; vertical-align: top; border: 2px solid #00D4AA; border-radius: 8px; padding: 12px; background: #f0fdf9;">
-                                <div style="font-size: 11px; color: #00a884; margin-bottom: 3px; font-weight: bold;">⚖️ REFORMA PENSIONAL</div>
-                                <div style="font-size: 9px; color: #999; margin-bottom: 10px;">Sistema Mixto (2.5 SMLV + Excedente)</div>
-                                <div style="font-size: 22px; font-weight: bold; color: #1a1a2e; margin-bottom: 6px;">${formatCurrency(res.pensionReformaOptimista)}</div>
-                                <div style="font-size: 10px; color: #666;">
-                                    Parte Colpensiones: ${formatCurrency(res.pensionReformaColp)}<br>
-                                    Parte Privado: ${formatCurrency(res.pensionReformaPrivConservador)} - ${formatCurrency(res.pensionReformaPrivOptimista)}
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-
-                    <!-- RECOMENDACIÓN -->
-                    <div style="background: linear-gradient(135deg, #00D4AA 0%, #00a884 100%); color: white; padding: 15px 18px; border-radius: 10px; margin-bottom: 15px;">
-                        <h3 style="margin: 0 0 10px 0; font-size: 13px; font-weight: bold;">💡 ¿CÓMO CERRAR ESTA BRECHA?</h3>
-                        <p style="margin: 0 0 12px 0; font-size: 11px; line-height: 1.5;">
-                            Tienes <strong>${res.anosRestantes} años</strong> para construir un patrimonio que complemente tu pensión. La clave está en comenzar <strong>HOY</strong> con una estrategia de acumulación paralela:
-                        </p>
-                        <table style="width: 100%;"><tr>
-                            <td style="font-size: 10px; padding: 4px 8px; background: rgba(255,255,255,0.2); border-radius: 12px; text-align: center;">✓ Pensión Voluntaria</td>
-                            <td style="width: 8px;"></td>
-                            <td style="font-size: 10px; padding: 4px 8px; background: rgba(255,255,255,0.2); border-radius: 12px; text-align: center;">✓ Fondos de Inversión</td>
-                            <td style="width: 8px;"></td>
-                            <td style="font-size: 10px; padding: 4px 8px; background: rgba(255,255,255,0.2); border-radius: 12px; text-align: center;">✓ Propiedad Raíz</td>
-                            <td style="width: 8px;"></td>
-                            <td style="font-size: 10px; padding: 4px 8px; background: rgba(255,255,255,0.2); border-radius: 12px; text-align: center;">✓ Bolsa de Valores</td>
-                            <td style="width: 8px;"></td>
-                            <td style="font-size: 10px; padding: 4px 8px; background: rgba(255,255,255,0.2); border-radius: 12px; text-align: center;">✓ Capital Privado</td>
-                        </tr></table>
-                    </div>
-
-                    <!-- CTA -->
-                    <div style="background: #1a1a2e; color: white; padding: 15px 20px; border-radius: 10px; text-align: center; margin-bottom: 15px;">
-                        <p style="margin: 0 0 6px 0; font-size: 13px; font-weight: bold;">
-                            ¿Quieres un plan personalizado para asegurar tu retiro?
-                        </p>
-                        <p style="margin: 0; font-size: 11px; opacity: 0.9;">
-                            Agenda una asesoría con nuestro equipo de expertos y descubre las mejores alternativas de inversión para tu perfil.
-                        </p>
-                    </div>
-
-                    <!-- DISCLAIMER -->
-                    <div style="background: #fff8e6; border: 1px solid #f0c36d; border-radius: 6px; padding: 10px 12px; font-size: 9px; color: #8a6d3b; line-height: 1.5;">
-                        <strong>⚠️ Aviso Legal:</strong> Esta es una proyección estimada con fines educativos. Las condiciones laborales, normativas y reformas pensionales pueden cambiar en el futuro. Este cálculo no constituye asesoría financiera formal. Los porcentajes del fondo privado (40%-45%) son estimaciones conservadoras basadas en promedios históricos del mercado. Consulta con un profesional certificado para decisiones importantes sobre tu pensión.
-                    </div>
-
-                </div>
-            `;
-
-            // Agregar al DOM temporalmente
-            document.body.appendChild(pdfContainer);
-
-            const opt = {
-                margin: 0,
-                filename: `Diagnostico_Pensional_${nombre}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { 
-                    scale: 2, 
-                    useCORS: true,
-                    logging: false,
-                    backgroundColor: '#ffffff',
-                    width: 794,
-                    windowWidth: 794
-                },
-                jsPDF: { 
-                    unit: 'px', 
-                    format: [794, 1123],
-                    orientation: 'portrait',
-                    hotfixes: ['px_scaling']
-                }
-            };
-
-            html2pdf().set(opt).from(pdfContainer).save().then(() => {
-                document.body.removeChild(pdfContainer);
-            }).catch(error => {
-                console.error('Error generando PDF:', error);
-                document.body.removeChild(pdfContainer);
-                alert('Hubo un error al generar el PDF. Por favor intenta de nuevo.');
-            });
+        function imprimirDiagnostico() {
+            document.getElementById('print-header').style.display = 'block';
+            document.getElementById('print-fecha-inline').style.display = 'inline';
+            window.print();
+            setTimeout(() => {
+                document.getElementById('print-header').style.display = 'none';
+                document.getElementById('print-fecha-inline').style.display = 'none';
+            }, 1000);
         }
     </script>
 </body>
