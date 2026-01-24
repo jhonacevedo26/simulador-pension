@@ -1056,12 +1056,12 @@
                         <div class="stat-label">Años restantes</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-value" id="res-semanas-req">1,300</div>
-                        <div class="stat-label">Semanas requeridas</div>
+                        <div class="stat-value" id="res-semanas-actuales">500</div>
+                        <div class="stat-label">Semanas actuales</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-value" id="res-semanas-faltantes">500</div>
-                        <div class="stat-label">Semanas faltantes</div>
+                        <div class="stat-value" id="res-semanas-proyectadas">1,800</div>
+                        <div class="stat-label">Semanas proyectadas</div>
                     </div>
                     <div class="stat-item">
                         <div class="stat-value" id="res-ano-pension">2050</div>
@@ -1081,7 +1081,9 @@
                             </div>
                         </div>
                         <div class="result-value" id="res-colpensiones">$0</div>
-                        <div class="result-range">Tasa: <span id="res-tasa-colp">0%</span></div>
+                        <div class="result-range">Tasa base (R): <span id="res-tasa-r">0%</span></div>
+                        <div class="result-range">Adicional (<span id="res-bloques">0</span> bloques): <span id="res-adicional">+0%</span></div>
+                        <div class="result-range" style="font-weight: 600; color: var(--primary); margin-top: 4px;">Tasa final: <span id="res-tasa-colp">0%</span></div>
                     </div>
 
                     <div class="result-card">
@@ -1265,34 +1267,76 @@
             const anoPension = anoActual + anosRestantes;
 
             let semanasRequeridas = genero === 'Hombre' ? 1300 : calcularSemanasRequeridasMujer(anoPension, hijos);
+            
+            // Proyectar semanas a la edad de pensión (52 semanas por año)
+            const semanasProyectadas = semanasCotizadas + (anosRestantes * 52);
             const semanasFaltantes = Math.max(0, semanasRequeridas - semanasCotizadas);
 
-            // Colpensiones
+            // =====================================================
+            // CASO 1: COLPENSIONES (Lógica Colpensiones)
+            // =====================================================
+            // R = tasa base según IBL
+            // Adicional = por cada 50 semanas después de 1300, +1.5% (máx 15%)
+            // Pensión = IBL × (R + Adicional)
+            
             const S = ibl / smlv;
             let R = 65.5 - (0.5 * S);
-            const semanasParaCalculo = Math.min(semanasCotizadas, 1800);
-            const semanasAdicionales = Math.max(0, semanasParaCalculo - semanasRequeridas);
-            const adicional = Math.floor(semanasAdicionales / 50) * 1.5;
+            
+            // Calcular adicional con semanas PROYECTADAS, tope 1800
+            const semanasParaCalculo = Math.min(semanasProyectadas, 1800);
+            const semanasBase = 1300;
+            const semanasAdicionales = Math.max(0, semanasParaCalculo - semanasBase);
+            const bloques = Math.floor(semanasAdicionales / 50); // Máximo 10 bloques
+            const adicional = bloques * 1.5; // Máximo 15%
+            
             const tasaFinalColp = R + adicional;
             let pensionColpensiones = ibl * (tasaFinalColp / 100);
-            const pensionMinima = smlv, pensionMaxima = smlv * 25;
+            
+            // Aplicar topes
+            const pensionMinima = smlv;
+            const pensionMaxima = smlv * 25;
             pensionColpensiones = Math.max(pensionMinima, Math.min(pensionMaxima, pensionColpensiones));
 
-            // Fondo Privado
-            let pensionPrivadoConservador = Math.max(pensionMinima, Math.min(pensionMaxima, ibl * 0.40));
-            let pensionPrivadoOptimista = Math.max(pensionMinima, Math.min(pensionMaxima, ibl * 0.45));
+            // =====================================================
+            // CASO 2: FONDO PRIVADO
+            // =====================================================
+            // Conservador: 40% del IBL
+            // Optimista: 45% del IBL
+            
+            let pensionPrivadoConservador = ibl * 0.40;
+            let pensionPrivadoOptimista = ibl * 0.45;
+            
+            // Aplicar topes
+            pensionPrivadoConservador = Math.max(pensionMinima, Math.min(pensionMaxima, pensionPrivadoConservador));
+            pensionPrivadoOptimista = Math.max(pensionMinima, Math.min(pensionMaxima, pensionPrivadoOptimista));
 
-            // Reforma
-            const limiteColpensiones = smlv * 2.5;
-            const iblColpensiones = Math.min(ibl, limiteColpensiones);
-            const iblPrivado = Math.max(0, ibl - limiteColpensiones);
-            const S_reforma = iblColpensiones / smlv;
-            let R_reforma = 65.5 - (0.5 * S_reforma);
-            let pensionReformaColp = iblColpensiones * ((R_reforma + adicional) / 100);
-            let pensionReformaPrivConservador = iblPrivado * 0.40;
-            let pensionReformaPrivOptimista = iblPrivado * 0.45;
-            let pensionReformaTotalConservador = Math.max(pensionMinima, Math.min(pensionMaxima, pensionReformaColp + pensionReformaPrivConservador));
-            let pensionReformaTotalOptimista = Math.max(pensionMinima, Math.min(pensionMaxima, pensionReformaColp + pensionReformaPrivOptimista));
+            // =====================================================
+            // CASO 3: REFORMA (Sistema Mixto)
+            // =====================================================
+            // Parte Colpensiones: primeros 2.5 SMLV con Lógica Colpensiones
+            // Parte Privado: excedente con Lógica Privado (40%-45%)
+            // Total = Parte Colpensiones + Parte Privado
+            
+            const iblReformaColp = Math.min(ibl, smlv * 2.5); // Máximo 2.5 SMLV
+            const iblReformaPriv = Math.max(0, ibl - (smlv * 2.5)); // Excedente
+            
+            // Aplicar Lógica Colpensiones sobre 2.5 SMLV
+            const S_reforma = iblReformaColp / smlv;
+            const R_reforma = 65.5 - (0.5 * S_reforma);
+            const tasaFinalReformaColp = R_reforma + adicional; // Mismo adicional por semanas
+            let pensionReformaColp = iblReformaColp * (tasaFinalReformaColp / 100);
+            
+            // Aplicar Lógica Privado sobre excedente
+            let pensionReformaPrivConservador = iblReformaPriv * 0.40;
+            let pensionReformaPrivOptimista = iblReformaPriv * 0.45;
+            
+            // Sumar ambas partes
+            let pensionReformaTotalConservador = pensionReformaColp + pensionReformaPrivConservador;
+            let pensionReformaTotalOptimista = pensionReformaColp + pensionReformaPrivOptimista;
+            
+            // Aplicar topes al total
+            pensionReformaTotalConservador = Math.max(pensionMinima, Math.min(pensionMaxima, pensionReformaTotalConservador));
+            pensionReformaTotalOptimista = Math.max(pensionMinima, Math.min(pensionMaxima, pensionReformaTotalOptimista));
 
             const mejorPension = Math.max(pensionColpensiones, pensionPrivadoOptimista, pensionReformaTotalOptimista);
             const brechaPensional = ibl - mejorPension;
@@ -1300,6 +1344,7 @@
 
             resultadosCalculados = {
                 nombre, email, telefono, genero, edad, hijos, ibl, semanasCotizadas, smlv,
+                semanasProyectadas,
                 pensionColpensiones: Math.round(pensionColpensiones),
                 pensionPrivadoConservador: Math.round(pensionPrivadoConservador),
                 pensionPrivadoOptimista: Math.round(pensionPrivadoOptimista),
@@ -1307,7 +1352,11 @@
                 pensionReformaOptimista: Math.round(pensionReformaTotalOptimista),
                 brechaPensional: Math.round(brechaPensional),
                 anoEstimadoPension: anoPension,
-                semanasRequeridas, semanasFaltantes, edadPension, anosRestantes, tasaFinalColp,
+                semanasRequeridas, semanasFaltantes, edadPension, anosRestantes,
+                R: R,
+                adicional: adicional,
+                tasaFinalColp,
+                bloques,
                 pensionReformaColp: Math.round(pensionReformaColp),
                 pensionReformaPrivConservador: Math.round(pensionReformaPrivConservador),
                 pensionReformaPrivOptimista: Math.round(pensionReformaPrivOptimista),
@@ -1355,12 +1404,15 @@
             // Situación
             document.getElementById('res-edad-pension').textContent = res.edadPension;
             document.getElementById('res-anos-restantes').textContent = res.anosRestantes;
-            document.getElementById('res-semanas-req').textContent = res.semanasRequeridas.toLocaleString('es-CO');
-            document.getElementById('res-semanas-faltantes').textContent = res.semanasFaltantes > 0 ? res.semanasFaltantes.toLocaleString('es-CO') : '✓ Cumple';
+            document.getElementById('res-semanas-actuales').textContent = res.semanasCotizadas.toLocaleString('es-CO');
+            document.getElementById('res-semanas-proyectadas').textContent = Math.min(res.semanasProyectadas, 1800).toLocaleString('es-CO');
             document.getElementById('res-ano-pension').textContent = res.anoEstimadoPension;
 
             // Escenarios
             document.getElementById('res-colpensiones').textContent = formatCurrency(res.pensionColpensiones);
+            document.getElementById('res-tasa-r').textContent = res.R.toFixed(2) + '%';
+            document.getElementById('res-bloques').textContent = res.bloques;
+            document.getElementById('res-adicional').textContent = '+' + res.adicional.toFixed(1) + '%';
             document.getElementById('res-tasa-colp').textContent = res.tasaFinalColp.toFixed(2) + '%';
             document.getElementById('res-privado-optimista').textContent = formatCurrency(res.pensionPrivadoOptimista);
             document.getElementById('res-privado-conservador').textContent = formatCurrency(res.pensionPrivadoConservador);
