@@ -12,6 +12,8 @@
             --accent: #00D4AA;
             --accent-dark: #00b894;
             --warning: #FF6B6B;
+            --warning-yellow: #F59E0B;
+            --success: #10B981;
             --bg-light: #F8FAFC;
             --bg-card: #FFFFFF;
             --text-primary: #0A2540;
@@ -21,11 +23,7 @@
             --shadow-lg: 0 20px 25px -5px rgba(10, 37, 64, 0.1), 0 8px 10px -6px rgba(10, 37, 64, 0.1);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'DM Sans', sans-serif;
@@ -35,11 +33,7 @@
             line-height: 1.6;
         }
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
 
         /* Header */
         .header {
@@ -122,20 +116,9 @@
             font-size: 0.85rem;
         }
 
-        .progress-step.active .step-number {
-            background: var(--accent);
-            color: white;
-        }
-
-        .progress-step.completed .step-number {
-            background: white;
-            color: var(--accent);
-        }
-
-        .step-label {
-            font-weight: 500;
-            font-size: 0.9rem;
-        }
+        .progress-step.active .step-number { background: var(--accent); color: white; }
+        .progress-step.completed .step-number { background: white; color: var(--accent); }
+        .step-label { font-weight: 500; font-size: 0.9rem; }
 
         /* Card */
         .card {
@@ -181,73 +164,35 @@
             gap: 20px;
         }
 
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .form-group.full-width {
-            grid-column: 1 / -1;
-        }
-
-        .label-row {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        label {
-            font-weight: 600;
-            font-size: 0.9rem;
-            color: var(--text-primary);
-        }
-
-        .label-hint {
-            font-weight: 400;
-            color: var(--text-secondary);
-            font-size: 0.8rem;
-        }
+        .form-group { display: flex; flex-direction: column; gap: 8px; }
+        .form-group.full-width { grid-column: 1 / -1; }
+        .label-row { display: flex; align-items: center; gap: 8px; }
+        label { font-weight: 600; font-size: 0.9rem; color: var(--text-primary); }
+        .label-hint { font-weight: 400; color: var(--text-secondary); font-size: 0.8rem; }
 
         /* Tooltip */
-        .tooltip-container {
-            position: relative;
-            display: inline-flex;
-        }
-
+        .tooltip-container { position: relative; display: inline-flex; }
         .tooltip-icon {
-            width: 18px;
-            height: 18px;
+            width: 18px; height: 18px;
             background: var(--border);
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.7rem;
-            font-weight: 700;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.7rem; font-weight: 700;
             color: var(--text-secondary);
             cursor: help;
             transition: all 0.3s ease;
         }
-
-        .tooltip-icon:hover {
-            background: var(--accent);
-            color: white;
-        }
-
+        .tooltip-icon:hover { background: var(--accent); color: white; }
         .tooltip-text {
-            visibility: hidden;
-            opacity: 0;
+            visibility: hidden; opacity: 0;
             position: absolute;
             bottom: calc(100% + 10px);
-            left: 50%;
-            transform: translateX(-50%);
+            left: 50%; transform: translateX(-50%);
             background: var(--primary);
             color: white;
             padding: 12px 16px;
             border-radius: 12px;
-            font-size: 0.85rem;
-            font-weight: 400;
+            font-size: 0.85rem; font-weight: 400;
             width: 280px;
             text-align: left;
             z-index: 100;
@@ -255,21 +200,15 @@
             transition: all 0.3s ease;
             line-height: 1.5;
         }
-
         .tooltip-text::after {
             content: '';
             position: absolute;
-            top: 100%;
-            left: 50%;
+            top: 100%; left: 50%;
             transform: translateX(-50%);
             border: 8px solid transparent;
             border-top-color: var(--primary);
         }
-
-        .tooltip-container:hover .tooltip-text {
-            visibility: visible;
-            opacity: 1;
-        }
+        .tooltip-container:hover .tooltip-text { visibility: visible; opacity: 1; }
 
         input, select {
             padding: 14px 16px;
@@ -289,14 +228,9 @@
         }
 
         /* Gender Toggle */
-        .gender-toggle {
-            display: flex;
-            gap: 12px;
-        }
-
+        .gender-toggle { display: flex; gap: 12px; }
         .gender-option {
-            flex: 1;
-            padding: 16px;
+            flex: 1; padding: 16px;
             border: 2px solid var(--border);
             border-radius: 12px;
             text-align: center;
@@ -304,28 +238,14 @@
             transition: all 0.3s ease;
             background: var(--bg-light);
         }
-
-        .gender-option:hover {
-            border-color: var(--accent);
-        }
-
+        .gender-option:hover { border-color: var(--accent); }
         .gender-option.selected {
             border-color: var(--accent);
             background: linear-gradient(135deg, rgba(0, 212, 170, 0.1) 0%, rgba(0, 212, 170, 0.05) 100%);
         }
-
-        .gender-option input {
-            display: none;
-        }
-
-        .gender-icon {
-            font-size: 2rem;
-            margin-bottom: 8px;
-        }
-
-        .gender-label {
-            font-weight: 600;
-        }
+        .gender-option input { display: none; }
+        .gender-icon { font-size: 2rem; margin-bottom: 8px; }
+        .gender-label { font-weight: 600; }
 
         /* Buttons */
         .btn {
@@ -348,46 +268,33 @@
             color: white;
             box-shadow: 0 4px 14px rgba(0, 212, 170, 0.4);
         }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 212, 170, 0.5);
-        }
-
-        .btn-primary:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-            transform: none;
-        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 212, 170, 0.5); }
+        .btn-primary:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
 
         .btn-secondary {
             background: var(--bg-light);
             color: var(--text-primary);
             border: 2px solid var(--border);
         }
-
-        .btn-secondary:hover {
-            border-color: var(--accent);
-            background: white;
-        }
+        .btn-secondary:hover { border-color: var(--accent); background: white; }
 
         .btn-download {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
             color: white;
             box-shadow: 0 4px 14px rgba(10, 37, 64, 0.3);
         }
+        .btn-download:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(10, 37, 64, 0.4); }
 
-        .btn-download:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(10, 37, 64, 0.4);
+        .btn-cta {
+            background: linear-gradient(135deg, var(--warning) 0%, #e55a5a 100%);
+            color: white;
+            box-shadow: 0 4px 14px rgba(255, 107, 107, 0.4);
+            font-size: 1.1rem;
+            padding: 18px 36px;
         }
+        .btn-cta:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255, 107, 107, 0.5); }
 
-        .btn-group {
-            display: flex;
-            gap: 12px;
-            margin-top: 24px;
-            flex-wrap: wrap;
-        }
+        .btn-group { display: flex; gap: 12px; margin-top: 24px; flex-wrap: wrap; }
 
         /* Results Section */
         .results-grid {
@@ -404,61 +311,27 @@
             border: 2px solid var(--border);
             transition: all 0.3s ease;
         }
-
-        .result-card:hover {
-            border-color: var(--accent);
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-lg);
-        }
-
+        .result-card:hover { border-color: var(--accent); transform: translateY(-4px); box-shadow: var(--shadow-lg); }
         .result-card.highlight {
             border-color: var(--accent);
             background: linear-gradient(135deg, rgba(0, 212, 170, 0.08) 0%, rgba(0, 212, 170, 0.02) 100%);
         }
 
-        .result-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 12px;
-        }
-
+        .result-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
         .result-icon {
-            width: 44px;
-            height: 44px;
+            width: 44px; height: 44px;
             border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex; align-items: center; justify-content: center;
             font-size: 1.4rem;
         }
-
         .result-icon.colpensiones { background: #E8F5E9; }
         .result-icon.privado { background: #E3F2FD; }
         .result-icon.reforma { background: #FFF3E0; }
 
-        .result-title {
-            font-weight: 700;
-            font-size: 0.95rem;
-            color: var(--primary);
-        }
-
-        .result-subtitle {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-        }
-
-        .result-value {
-            font-size: 1.6rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 6px;
-        }
-
-        .result-range {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-        }
+        .result-title { font-weight: 700; font-size: 0.95rem; color: var(--primary); }
+        .result-subtitle { font-size: 0.8rem; color: var(--text-secondary); }
+        .result-value { font-size: 1.6rem; font-weight: 700; color: var(--primary); margin-bottom: 6px; }
+        .result-range { font-size: 0.9rem; color: var(--text-secondary); }
 
         /* Resumen Ejecutivo */
         .resumen-ejecutivo {
@@ -468,46 +341,19 @@
             border-radius: 16px;
             margin-bottom: 24px;
         }
+        .resumen-ejecutivo h3 { color: var(--accent); margin-bottom: 16px; font-size: 1.1rem; }
 
-        .resumen-ejecutivo h3 {
-            color: var(--accent);
-            margin-bottom: 16px;
-            font-size: 1.1rem;
-        }
-
-        .resumen-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-
+        .resumen-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
         .resumen-item {
             text-align: center;
             padding: 16px 12px;
             background: rgba(255,255,255,0.1);
             border-radius: 12px;
         }
-
-        .resumen-item.alerta {
-            background: rgba(255,107,107,0.3);
-            border: 2px solid var(--warning);
-        }
-
-        .resumen-item-label {
-            font-size: 0.8rem;
-            opacity: 0.85;
-            margin-bottom: 6px;
-        }
-
-        .resumen-item-value {
-            font-size: 1.4rem;
-            font-weight: 700;
-        }
-
-        .resumen-item.alerta .resumen-item-value {
-            color: var(--warning);
-        }
+        .resumen-item.alerta { background: rgba(255,107,107,0.3); border: 2px solid var(--warning); }
+        .resumen-item-label { font-size: 0.8rem; opacity: 0.85; margin-bottom: 6px; }
+        .resumen-item-value { font-size: 1.4rem; font-weight: 700; }
+        .resumen-item.alerta .resumen-item-value { color: var(--warning); }
 
         .alerta-box {
             background: rgba(255,107,107,0.2);
@@ -516,16 +362,69 @@
             border-radius: 0 12px 12px 0;
             margin-top: 16px;
         }
+        .alerta-box p { margin: 0; font-size: 0.95rem; line-height: 1.6; }
+        .alerta-box strong { color: var(--warning); }
 
-        .alerta-box p {
-            margin: 0;
-            font-size: 0.95rem;
-            line-height: 1.6;
+        /* Semáforo de Urgencia */
+        .semaforo-urgencia {
+            padding: 20px 24px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
         }
+        .semaforo-urgencia.verde { background: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%); border: 2px solid var(--success); }
+        .semaforo-urgencia.amarillo { background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%); border: 2px solid var(--warning-yellow); }
+        .semaforo-urgencia.rojo { background: linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%); border: 2px solid var(--warning); }
 
-        .alerta-box strong {
-            color: var(--warning);
+        .semaforo-icon { font-size: 2.5rem; }
+        .semaforo-content { flex: 1; }
+        .semaforo-titulo { font-weight: 700; font-size: 1.1rem; margin-bottom: 4px; }
+        .semaforo-urgencia.verde .semaforo-titulo { color: #065F46; }
+        .semaforo-urgencia.amarillo .semaforo-titulo { color: #92400E; }
+        .semaforo-urgencia.rojo .semaforo-titulo { color: #991B1B; }
+        .semaforo-mensaje { font-size: 0.9rem; }
+        .semaforo-urgencia.verde .semaforo-mensaje { color: #047857; }
+        .semaforo-urgencia.amarillo .semaforo-mensaje { color: #B45309; }
+        .semaforo-urgencia.rojo .semaforo-mensaje { color: #DC2626; }
+
+        /* Simulador de Ahorro */
+        .simulador-box {
+            background: linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 100%);
+            border: 2px solid #6366F1;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
         }
+        .simulador-box h4 { color: #4338CA; margin-bottom: 16px; font-size: 1.1rem; }
+
+        .simulador-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        .simulador-input-group { display: flex; flex-direction: column; gap: 6px; }
+        .simulador-input-group label { font-size: 0.85rem; color: #4338CA; font-weight: 600; }
+        .simulador-input-group input {
+            padding: 12px;
+            border: 2px solid #A5B4FC;
+            border-radius: 10px;
+            background: white;
+        }
+        .simulador-input-group input:focus { border-color: #6366F1; }
+
+        .simulador-resultado {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+        .simulador-resultado-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+        .simulador-stat { padding: 12px; }
+        .simulador-stat-value { font-size: 1.5rem; font-weight: 700; color: #4338CA; }
+        .simulador-stat-label { font-size: 0.8rem; color: var(--text-secondary); }
 
         /* Brecha Card */
         .brecha-card {
@@ -536,26 +435,9 @@
             text-align: center;
             margin-bottom: 24px;
         }
-
-        .brecha-card h3 {
-            font-size: 1rem;
-            margin-bottom: 8px;
-            opacity: 0.9;
-        }
-
-        .brecha-value {
-            font-size: 2.2rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-
-        .brecha-text {
-            font-size: 0.9rem;
-            opacity: 0.9;
-            max-width: 450px;
-            margin: 0 auto;
-        }
-
+        .brecha-card h3 { font-size: 1rem; margin-bottom: 8px; opacity: 0.9; }
+        .brecha-value { font-size: 2.2rem; font-weight: 700; margin-bottom: 10px; }
+        .brecha-text { font-size: 0.9rem; opacity: 0.9; max-width: 450px; margin: 0 auto; }
         .porcentaje-reduccion {
             display: inline-block;
             background: rgba(0,0,0,0.2);
@@ -573,24 +455,10 @@
             padding: 24px;
             margin-bottom: 24px;
         }
+        .info-box h4 { color: var(--accent-dark); margin-bottom: 12px; font-size: 1.1rem; }
+        .info-box p { margin-bottom: 16px; color: var(--text-primary); }
 
-        .info-box h4 {
-            color: var(--accent-dark);
-            margin-bottom: 12px;
-            font-size: 1.1rem;
-        }
-
-        .info-box p {
-            margin-bottom: 16px;
-            color: var(--text-primary);
-        }
-
-        .estrategias-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
+        .estrategias-grid { display: flex; flex-wrap: wrap; gap: 10px; }
         .estrategia-tag {
             background: white;
             border: 1px solid var(--accent);
@@ -603,23 +471,15 @@
 
         /* CTA Box */
         .cta-box {
-            background: var(--primary);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
             color: white;
-            padding: 24px;
+            padding: 28px;
             border-radius: 16px;
             text-align: center;
             margin-bottom: 24px;
         }
-
-        .cta-box h4 {
-            margin-bottom: 8px;
-            font-size: 1.1rem;
-        }
-
-        .cta-box p {
-            opacity: 0.9;
-            font-size: 0.95rem;
-        }
+        .cta-box h4 { margin-bottom: 10px; font-size: 1.2rem; }
+        .cta-box p { opacity: 0.9; font-size: 0.95rem; margin-bottom: 20px; }
 
         /* Summary Stats */
         .summary-stats {
@@ -628,7 +488,6 @@
             gap: 12px;
             margin-bottom: 24px;
         }
-
         .stat-item {
             text-align: center;
             padding: 16px;
@@ -636,18 +495,8 @@
             border-radius: 12px;
             border: 1px solid var(--border);
         }
-
-        .stat-value {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: var(--primary);
-        }
-
-        .stat-label {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            margin-top: 4px;
-        }
+        .stat-value { font-size: 1.4rem; font-weight: 700; color: var(--primary); }
+        .stat-label { font-size: 0.8rem; color: var(--text-secondary); margin-top: 4px; }
 
         /* Datos entrada box */
         .datos-entrada-box {
@@ -657,35 +506,17 @@
             margin-bottom: 20px;
             border: 1px solid var(--border);
         }
-
-        .datos-entrada-box h4 {
-            font-size: 0.9rem;
-            margin-bottom: 12px;
-            color: var(--primary);
-        }
-
+        .datos-entrada-box h4 { font-size: 0.9rem; margin-bottom: 12px; color: var(--primary); }
         .datos-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 8px;
         }
+        .dato-item { display: flex; justify-content: space-between; font-size: 0.85rem; }
+        .dato-label { color: var(--text-secondary); }
+        .dato-value { font-weight: 600; color: var(--primary); }
 
-        .dato-item {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.85rem;
-        }
-
-        .dato-label {
-            color: var(--text-secondary);
-        }
-
-        .dato-value {
-            font-weight: 600;
-            color: var(--primary);
-        }
-
-        /* Disclaimer */
+        /* Disclaimer & Footer */
         .disclaimer {
             background: #FEF3C7;
             border: 1px solid #F59E0B;
@@ -695,30 +526,39 @@
             color: #92400E;
             margin-top: 24px;
         }
+        .disclaimer-title { font-weight: 700; margin-bottom: 6px; }
 
-        .disclaimer-title {
-            font-weight: 700;
-            margin-bottom: 6px;
+        .footer-creditos {
+            text-align: center;
+            padding: 24px;
+            margin-top: 20px;
+            border-top: 1px solid var(--border);
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+        .footer-creditos a {
+            color: var(--accent-dark);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .footer-creditos a:hover { text-decoration: underline; }
+        .footer-disclaimer {
+            font-size: 0.75rem;
+            margin-top: 12px;
+            color: #94A3B8;
+            line-height: 1.5;
         }
 
-        /* Hidden */
-        .hidden {
-            display: none !important;
-        }
-
-        /* Spinner */
+        /* Hidden & Utils */
+        .hidden { display: none !important; }
         .spinner {
-            width: 20px;
-            height: 20px;
+            width: 20px; height: 20px;
             border: 3px solid rgba(255, 255, 255, 0.3);
             border-top-color: white;
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
         }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
         /* Responsive */
         @media (max-width: 600px) {
@@ -732,78 +572,19 @@
             .gender-toggle { flex-direction: column; }
             .resumen-grid { grid-template-columns: 1fr; }
             .tooltip-text { width: 220px; left: 0; transform: translateX(0); }
+            .semaforo-urgencia { flex-direction: column; text-align: center; }
         }
 
-        /* ============================================ */
-        /* ESTILOS DE IMPRESIÓN                        */
-        /* ============================================ */
+        /* Print Styles */
         @media print {
-            * {
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-            }
-
-            body {
-                background: white !important;
-                font-size: 11px;
-            }
-
-            .container {
-                max-width: 100%;
-                padding: 0;
-                margin: 0;
-            }
-
-            .no-print {
-                display: none !important;
-            }
-
-            .header, .progress-container {
-                display: none !important;
-            }
-
-            .card {
-                box-shadow: none;
-                border-radius: 0;
-                padding: 20px;
-                margin: 0;
-                page-break-inside: avoid;
-            }
-
-            .resumen-ejecutivo {
-                background: #1a1a2e !important;
-                -webkit-print-color-adjust: exact;
-            }
-
-            .brecha-card {
-                background: #FF6B6B !important;
-            }
-
-            .info-box {
-                background: #f0fdf9 !important;
-                border: 2px solid #00D4AA !important;
-            }
-
-            .cta-box {
-                background: #1a1a2e !important;
-            }
-
-            .result-card {
-                break-inside: avoid;
-            }
-
-            .results-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-
-            .btn-group {
-                display: none !important;
-            }
-
-            @page {
-                margin: 1cm;
-                size: A4;
-            }
+            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            body { background: white !important; font-size: 11px; }
+            .container { max-width: 100%; padding: 0; margin: 0; }
+            .no-print { display: none !important; }
+            .header, .progress-container { display: none !important; }
+            .card { box-shadow: none; border-radius: 0; padding: 20px; margin: 0; page-break-inside: avoid; }
+            .btn-group { display: none !important; }
+            @page { margin: 1cm; size: A4; }
         }
     </style>
 </head>
@@ -970,21 +751,23 @@
         <div class="card hidden" id="step3">
             <div id="resultados-content">
                 
-                <!-- Header para impresión -->
-                <div style="text-align: center; margin-bottom: 20px; display: none;" id="print-header">
-                    <h1 style="font-size: 1.5rem; color: var(--primary); margin-bottom: 5px;">📊 DIAGNÓSTICO PENSIONAL</h1>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Generado el <span id="print-fecha"></span></p>
-                </div>
-
                 <h2 class="card-title no-print">
                     <span class="card-title-icon">📋</span>
                     Tu Diagnóstico Pensional
                 </h2>
 
                 <p style="margin-bottom: 16px; color: var(--text-secondary);">
-                    Diagnóstico para: <strong id="res-nombre" style="color: var(--primary);"></strong> 
-                    <span id="print-fecha-inline" style="display: none;"> | <span id="print-fecha2"></span></span>
+                    Diagnóstico para: <strong id="res-nombre" style="color: var(--primary);"></strong>
                 </p>
+
+                <!-- SEMÁFORO DE URGENCIA -->
+                <div class="semaforo-urgencia verde" id="semaforo">
+                    <div class="semaforo-icon" id="semaforo-icon">🟢</div>
+                    <div class="semaforo-content">
+                        <div class="semaforo-titulo" id="semaforo-titulo">Vas por buen camino</div>
+                        <div class="semaforo-mensaje" id="semaforo-mensaje">Tu brecha es manejable, pero no te confíes. Es momento de optimizar tu estrategia.</div>
+                    </div>
+                </div>
 
                 <!-- RESUMEN EJECUTIVO -->
                 <div class="resumen-ejecutivo">
@@ -1007,9 +790,6 @@
                         <p>
                             <strong>⚠️ ATENCIÓN:</strong> Al pensionarte, tu ingreso pasará de <strong id="res-de"></strong> a aproximadamente <strong id="res-a"></strong>. 
                             Esto representa una <strong>reducción del <span id="res-porcentaje">0</span>%</strong> en tu capacidad económica mensual.
-                        </p>
-                        <p style="margin-top: 10px;">
-                            <strong>Sin una estrategia de acumulación paralela, podrías enfrentar dificultades para mantener tu calidad de vida actual en el retiro.</strong>
                         </p>
                     </div>
                 </div>
@@ -1096,6 +876,9 @@
                         </div>
                         <div class="result-value" id="res-privado-optimista">$0</div>
                         <div class="result-range">Rango: <span id="res-privado-conservador">$0</span> - <span id="res-privado-optimista-2">$0</span></div>
+                        <div class="result-range" style="font-size: 0.8rem; margin-top: 8px; color: var(--text-secondary);">
+                            *Estimación histórica. Varía según capital acumulado y condiciones del afiliado.
+                        </div>
                     </div>
 
                     <div class="result-card highlight">
@@ -1109,8 +892,8 @@
                         <div class="result-value" id="res-reforma-optimista">$0</div>
                         <div class="result-range">Rango: <span id="res-reforma-conservador">$0</span> - <span id="res-reforma-optimista-2">$0</span></div>
                         <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); font-size: 0.8rem;">
-                            <div>Parte Colpensiones: <strong id="res-reforma-colp">$0</strong></div>
-                            <div>Parte Privado: <strong id="res-reforma-priv">$0 - $0</strong></div>
+                            <div>Parte Colpensiones (2.5 SMLV): <strong id="res-reforma-colp">$0</strong></div>
+                            <div>Parte Privado (excedente): <strong id="res-reforma-priv">$0 - $0</strong></div>
                         </div>
                     </div>
                 </div>
@@ -1125,29 +908,70 @@
                     </div>
                 </div>
 
+                <!-- SIMULADOR DE AHORRO -->
+                <div class="simulador-box">
+                    <h4>🧮 Simulador de Ahorro e Inversión</h4>
+                    <p style="font-size: 0.9rem; color: #4338CA; margin-bottom: 16px;">¿Cuánto necesitas ahorrar para cerrar tu brecha pensional? Ajusta los valores y descúbrelo:</p>
+                    
+                    <div class="simulador-grid">
+                        <div class="simulador-input-group">
+                            <label>Ahorro mensual</label>
+                            <input type="text" id="sim-ahorro" value="$500.000" oninput="formatSimuladorInput(this); calcularSimulador()">
+                        </div>
+                        <div class="simulador-input-group">
+                            <label>Años de ahorro</label>
+                            <input type="number" id="sim-anos" value="20" min="1" max="50" onchange="calcularSimulador()">
+                        </div>
+                        <div class="simulador-input-group">
+                            <label>Rentabilidad anual (%)</label>
+                            <input type="number" id="sim-tasa" value="8" min="1" max="20" step="0.5" onchange="calcularSimulador()">
+                        </div>
+                    </div>
+
+                    <div class="simulador-resultado">
+                        <div class="simulador-resultado-grid">
+                            <div class="simulador-stat">
+                                <div class="simulador-stat-value" id="sim-capital">$0</div>
+                                <div class="simulador-stat-label">Capital acumulado</div>
+                            </div>
+                            <div class="simulador-stat">
+                                <div class="simulador-stat-value" id="sim-renta">$0</div>
+                                <div class="simulador-stat-label">Renta mensual estimada*</div>
+                            </div>
+                        </div>
+                        <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 12px;">*Renta calculada al 4% anual sobre el capital (retiro sostenible)</p>
+                    </div>
+                </div>
+
                 <!-- Recomendación -->
                 <div class="info-box">
                     <h4>💡 ¿Cómo cerrar esta brecha?</h4>
-                    <p>Tienes <strong id="res-anos-restantes-2">0</strong> años para construir un patrimonio que complemente tu pensión. La clave está en comenzar <strong>HOY</strong> con una estrategia de acumulación paralela:</p>
+                    <p>Te recomiendo que diseñes un <strong>plan financiero</strong> y un <strong>plan de inversiones</strong> que te permitan estructurar tus finanzas de manera adecuada. Para eso, un buen comienzo es tener una <strong>asesoría profesional</strong>.</p>
+                    <p style="margin-top: 12px; margin-bottom: 12px;">Adicionalmente, tienes estas opciones para que evalúes cómo cerrar tu brecha pensional:</p>
                     <div class="estrategias-grid">
-                        <span class="estrategia-tag">✓ Pensión Voluntaria</span>
-                        <span class="estrategia-tag">✓ Fondos de Inversión</span>
-                        <span class="estrategia-tag">✓ Propiedad Raíz</span>
-                        <span class="estrategia-tag">✓ Bolsa de Valores</span>
-                        <span class="estrategia-tag">✓ Capital Privado</span>
+                        <span class="estrategia-tag">1. Seguros con acumulación de capital</span>
+                        <span class="estrategia-tag">2. Fondos de inversión</span>
+                        <span class="estrategia-tag">3. Pensión voluntaria</span>
+                        <span class="estrategia-tag">4. Propiedad raíz</span>
+                        <span class="estrategia-tag">5. Portafolio de rentas</span>
+                        <span class="estrategia-tag">6. Capital privado</span>
                     </div>
+                    <p style="margin-top: 16px; font-weight: 600; color: var(--primary);">¿Quieres más información? Busca asesoría con un profesional certificado y vigilado.</p>
                 </div>
 
                 <!-- CTA -->
                 <div class="cta-box">
                     <h4>¿Quieres un plan personalizado para asegurar tu retiro?</h4>
-                    <p>Agenda una asesoría con nuestro equipo de expertos y descubre las mejores alternativas de inversión para tu perfil.</p>
+                    <p>Agenda una asesoría con un experto y descubre las mejores alternativas de inversión para tu perfil.</p>
+                    <button class="btn btn-cta" onclick="solicitarAsesoria()">
+                        <span>📞</span> Quiero Asesoría
+                    </button>
                 </div>
 
                 <!-- Disclaimer -->
                 <div class="disclaimer">
                     <div class="disclaimer-title">⚠️ Aviso Legal</div>
-                    <p>Esta es una proyección estimada con fines educativos. Las condiciones laborales, normativas y reformas pensionales pueden cambiar. Este cálculo no constituye asesoría financiera formal. Los porcentajes del fondo privado (40%-45%) son estimaciones conservadoras. Consulta con un profesional certificado.</p>
+                    <p>Esta es una proyección estimada con fines educativos. Las condiciones laborales, normativas y reformas pensionales pueden cambiar. Este cálculo no constituye asesoría financiera formal. Los porcentajes del fondo privado (40%-45%) son estimaciones conservadoras basadas en promedios históricos. Consulta con un profesional certificado para decisiones importantes sobre tu pensión.</p>
                 </div>
             </div>
 
@@ -1156,6 +980,16 @@
                 <button class="btn btn-download" onclick="imprimirDiagnostico()"><span>🖨️</span> Imprimir / Guardar PDF</button>
             </div>
         </div>
+
+        <!-- Footer con créditos -->
+        <footer class="footer-creditos">
+            <p>Desarrollado por <a href="https://instagram.com/jhonanaliza" target="_blank">@jhonanaliza</a></p>
+            <p class="footer-disclaimer">
+                Esta herramienta es solo para fines educativos e informativos. No constituye asesoría financiera, legal o de inversiones. 
+                El creador no se hace responsable por decisiones tomadas basándose en los resultados de esta calculadora. 
+                Siempre consulta con profesionales certificados y vigilados antes de tomar decisiones financieras importantes.
+            </p>
+        </footer>
     </div>
 
     <script>
@@ -1180,6 +1014,10 @@
             if (value) {
                 input.value = '$' + parseInt(value).toLocaleString('es-CO');
             }
+        }
+
+        function formatSimuladorInput(input) {
+            formatCurrencyInput(input);
         }
 
         // Event listeners
@@ -1268,73 +1106,41 @@
 
             let semanasRequeridas = genero === 'Hombre' ? 1300 : calcularSemanasRequeridasMujer(anoPension, hijos);
             
-            // Proyectar semanas a la edad de pensión (52 semanas por año)
+            // Proyectar semanas a la edad de pensión
             const semanasProyectadas = semanasCotizadas + (anosRestantes * 52);
             const semanasFaltantes = Math.max(0, semanasRequeridas - semanasCotizadas);
 
-            // =====================================================
-            // CASO 1: COLPENSIONES (Lógica Colpensiones)
-            // =====================================================
-            // R = tasa base según IBL
-            // Adicional = por cada 50 semanas después de 1300, +1.5% (máx 15%)
-            // Pensión = IBL × (R + Adicional)
-            
+            // CASO 1: COLPENSIONES
             const S = ibl / smlv;
             let R = 65.5 - (0.5 * S);
-            
-            // Calcular adicional con semanas PROYECTADAS, tope 1800
             const semanasParaCalculo = Math.min(semanasProyectadas, 1800);
             const semanasBase = 1300;
             const semanasAdicionales = Math.max(0, semanasParaCalculo - semanasBase);
-            const bloques = Math.floor(semanasAdicionales / 50); // Máximo 10 bloques
-            const adicional = bloques * 1.5; // Máximo 15%
-            
+            const bloques = Math.floor(semanasAdicionales / 50);
+            const adicional = bloques * 1.5;
             const tasaFinalColp = R + adicional;
             let pensionColpensiones = ibl * (tasaFinalColp / 100);
-            
-            // Aplicar topes
             const pensionMinima = smlv;
             const pensionMaxima = smlv * 25;
             pensionColpensiones = Math.max(pensionMinima, Math.min(pensionMaxima, pensionColpensiones));
 
-            // =====================================================
             // CASO 2: FONDO PRIVADO
-            // =====================================================
-            // Conservador: 40% del IBL
-            // Optimista: 45% del IBL
-            
             let pensionPrivadoConservador = ibl * 0.40;
             let pensionPrivadoOptimista = ibl * 0.45;
-            
-            // Aplicar topes
             pensionPrivadoConservador = Math.max(pensionMinima, Math.min(pensionMaxima, pensionPrivadoConservador));
             pensionPrivadoOptimista = Math.max(pensionMinima, Math.min(pensionMaxima, pensionPrivadoOptimista));
 
-            // =====================================================
-            // CASO 3: REFORMA (Sistema Mixto)
-            // =====================================================
-            // Parte Colpensiones: primeros 2.5 SMLV con Lógica Colpensiones
-            // Parte Privado: excedente con Lógica Privado (40%-45%)
-            // Total = Parte Colpensiones + Parte Privado
-            
-            const iblReformaColp = Math.min(ibl, smlv * 2.5); // Máximo 2.5 SMLV
-            const iblReformaPriv = Math.max(0, ibl - (smlv * 2.5)); // Excedente
-            
-            // Aplicar Lógica Colpensiones sobre 2.5 SMLV
+            // CASO 3: REFORMA
+            const iblReformaColp = Math.min(ibl, smlv * 2.5);
+            const iblReformaPriv = Math.max(0, ibl - (smlv * 2.5));
             const S_reforma = iblReformaColp / smlv;
             const R_reforma = 65.5 - (0.5 * S_reforma);
-            const tasaFinalReformaColp = R_reforma + adicional; // Mismo adicional por semanas
+            const tasaFinalReformaColp = R_reforma + adicional;
             let pensionReformaColp = iblReformaColp * (tasaFinalReformaColp / 100);
-            
-            // Aplicar Lógica Privado sobre excedente
             let pensionReformaPrivConservador = iblReformaPriv * 0.40;
             let pensionReformaPrivOptimista = iblReformaPriv * 0.45;
-            
-            // Sumar ambas partes
             let pensionReformaTotalConservador = pensionReformaColp + pensionReformaPrivConservador;
             let pensionReformaTotalOptimista = pensionReformaColp + pensionReformaPrivOptimista;
-            
-            // Aplicar topes al total
             pensionReformaTotalConservador = Math.max(pensionMinima, Math.min(pensionMaxima, pensionReformaTotalConservador));
             pensionReformaTotalOptimista = Math.max(pensionMinima, Math.min(pensionMaxima, pensionReformaTotalOptimista));
 
@@ -1353,15 +1159,13 @@
                 brechaPensional: Math.round(brechaPensional),
                 anoEstimadoPension: anoPension,
                 semanasRequeridas, semanasFaltantes, edadPension, anosRestantes,
-                R: R,
-                adicional: adicional,
-                tasaFinalColp,
-                bloques,
+                R, adicional, tasaFinalColp, bloques,
                 pensionReformaColp: Math.round(pensionReformaColp),
                 pensionReformaPrivConservador: Math.round(pensionReformaPrivConservador),
                 pensionReformaPrivOptimista: Math.round(pensionReformaPrivOptimista),
                 mejorPension: Math.round(mejorPension),
-                porcentajeReduccion
+                porcentajeReduccion,
+                quiereAsesoria: 'No'
             };
 
             enviarAGoogleSheets(resultadosCalculados)
@@ -1381,6 +1185,31 @@
         }
 
         function mostrarResultados(res) {
+            // Semáforo de urgencia
+            const porcentaje = Math.abs(parseInt(res.porcentajeReduccion));
+            const semaforo = document.getElementById('semaforo');
+            const semaforoIcon = document.getElementById('semaforo-icon');
+            const semaforoTitulo = document.getElementById('semaforo-titulo');
+            const semaforoMensaje = document.getElementById('semaforo-mensaje');
+
+            semaforo.classList.remove('verde', 'amarillo', 'rojo');
+            if (porcentaje <= 20) {
+                semaforo.classList.add('verde');
+                semaforoIcon.textContent = '🟢';
+                semaforoTitulo.textContent = 'Vas por buen camino';
+                semaforoMensaje.textContent = 'Tu brecha es manejable, pero no te confíes. Es momento de optimizar tu estrategia para asegurar tu retiro.';
+            } else if (porcentaje <= 40) {
+                semaforo.classList.add('amarillo');
+                semaforoIcon.textContent = '🟡';
+                semaforoTitulo.textContent = 'Necesitas actuar pronto';
+                semaforoMensaje.textContent = 'Tu brecha pensional es significativa. Sin acción, tu calidad de vida en el retiro podría verse afectada.';
+            } else {
+                semaforo.classList.add('rojo');
+                semaforoIcon.textContent = '🔴';
+                semaforoTitulo.textContent = 'URGENTE: Tu calidad de vida está en riesgo';
+                semaforoMensaje.textContent = 'Tu brecha es crítica. Necesitas una estrategia de acumulación agresiva lo antes posible para evitar problemas financieros en tu retiro.';
+            }
+
             // Resumen ejecutivo
             document.getElementById('res-ingreso-actual').textContent = formatCurrency(res.ibl);
             document.getElementById('res-mejor-pension').textContent = formatCurrency(res.mejorPension);
@@ -1414,9 +1243,11 @@
             document.getElementById('res-bloques').textContent = res.bloques;
             document.getElementById('res-adicional').textContent = '+' + res.adicional.toFixed(1) + '%';
             document.getElementById('res-tasa-colp').textContent = res.tasaFinalColp.toFixed(2) + '%';
+
             document.getElementById('res-privado-optimista').textContent = formatCurrency(res.pensionPrivadoOptimista);
             document.getElementById('res-privado-conservador').textContent = formatCurrency(res.pensionPrivadoConservador);
             document.getElementById('res-privado-optimista-2').textContent = formatCurrency(res.pensionPrivadoOptimista);
+
             document.getElementById('res-reforma-optimista').textContent = formatCurrency(res.pensionReformaOptimista);
             document.getElementById('res-reforma-conservador').textContent = formatCurrency(res.pensionReformaConservador);
             document.getElementById('res-reforma-optimista-2').textContent = formatCurrency(res.pensionReformaOptimista);
@@ -1426,23 +1257,58 @@
             // Brecha
             document.getElementById('res-brecha').textContent = '-' + formatCurrency(Math.abs(res.brechaPensional));
             document.getElementById('res-porcentaje-2').textContent = Math.abs(res.porcentajeReduccion);
-            document.getElementById('res-anos-restantes-2').textContent = res.anosRestantes;
 
-            // Fecha
-            const fecha = new Date().toLocaleDateString('es-CO', { year: 'numeric', month: 'long', day: 'numeric' });
-            document.getElementById('print-fecha').textContent = fecha;
-            document.getElementById('print-fecha2').textContent = fecha;
+            // Simulador - valores iniciales basados en años restantes
+            document.getElementById('sim-anos').value = res.anosRestantes;
+            calcularSimulador();
+        }
+
+        // Simulador de Ahorro
+        function calcularSimulador() {
+            const ahorroMensual = parseCurrency(document.getElementById('sim-ahorro').value);
+            const anos = parseInt(document.getElementById('sim-anos').value) || 20;
+            const tasaAnual = parseFloat(document.getElementById('sim-tasa').value) || 8;
+
+            const tasaMensual = tasaAnual / 100 / 12;
+            const meses = anos * 12;
+
+            // Fórmula de valor futuro de anualidad
+            let capitalFinal = 0;
+            if (tasaMensual > 0) {
+                capitalFinal = ahorroMensual * ((Math.pow(1 + tasaMensual, meses) - 1) / tasaMensual);
+            } else {
+                capitalFinal = ahorroMensual * meses;
+            }
+
+            // Renta mensual al 4% anual (regla del 4%)
+            const rentaMensual = (capitalFinal * 0.04) / 12;
+
+            document.getElementById('sim-capital').textContent = formatCurrency(capitalFinal);
+            document.getElementById('sim-renta').textContent = formatCurrency(rentaMensual);
+        }
+
+        // Solicitar Asesoría
+        function solicitarAsesoria() {
+            // Actualizar el registro en Google Sheets
+            resultadosCalculados.quiereAsesoria = 'Sí';
+            
+            enviarAGoogleSheets(resultadosCalculados)
+                .then(() => {
+                    alert('¡Gracias por tu interés! Un asesor se pondrá en contacto contigo pronto.');
+                })
+                .catch(() => {
+                    alert('¡Gracias por tu interés! Un asesor se pondrá en contacto contigo pronto.');
+                });
         }
 
         function imprimirDiagnostico() {
-            document.getElementById('print-header').style.display = 'block';
-            document.getElementById('print-fecha-inline').style.display = 'inline';
             window.print();
-            setTimeout(() => {
-                document.getElementById('print-header').style.display = 'none';
-                document.getElementById('print-fecha-inline').style.display = 'none';
-            }, 1000);
         }
+
+        // Inicializar simulador
+        document.addEventListener('DOMContentLoaded', function() {
+            calcularSimulador();
+        });
     </script>
 </body>
 </html>
